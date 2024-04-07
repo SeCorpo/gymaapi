@@ -5,7 +5,7 @@ import logging
 from service.userService import register_user, email_available
 from dto.registerDTO import RegisterDTO
 
-router = APIRouter(prefix="/user", tags=["user"])
+router = APIRouter(prefix="/api/v1/user", tags=["user"])
 
 
 @router.post("/", status_code=201)

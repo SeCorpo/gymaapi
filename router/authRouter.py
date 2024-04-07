@@ -5,7 +5,7 @@ import logging
 from service.authService import login_user
 from dto.loginDTO import LoginDTO
 
-router = APIRouter(prefix="/auth", tags=["authentication"])
+router = APIRouter(prefix="/api/v1/auth", tags=["authentication"])
 
 
 @router.post("/login")
