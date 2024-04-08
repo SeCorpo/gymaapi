@@ -4,16 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5ef567d6-6873-43d9-9b0e-2a9dfae214f4" name="Changes" comment="gymaDTO,  CORS, api v1">
-      <change afterPath="$PROJECT_DIR$/dto/personDTO.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/router/pubRouter.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/service/pubService.py" afterDir="false" />
+    <list default="true" id="5ef567d6-6873-43d9-9b0e-2a9dfae214f4" name="Changes" comment="gymaGTO, PersonDTO, pubRouter, get_last_three_gyma_entry">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dto/gymaDTO.py" beforeDir="false" afterPath="$PROJECT_DIR$/dto/gymaDTO.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/Gyma.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/Gyma.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/Person.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/Person.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/User.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/User.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/router/gymaRouter.py" beforeDir="false" afterPath="$PROJECT_DIR$/router/gymaRouter.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/router/pubRouter.py" beforeDir="false" afterPath="$PROJECT_DIR$/router/pubRouter.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -128,7 +121,7 @@
       <updated>1711481007314</updated>
       <workItem from="1711481016187" duration="104278000" />
       <workItem from="1712174754754" duration="1179000" />
-      <workItem from="1712421841991" duration="22350000" />
+      <workItem from="1712421841991" duration="24684000" />
     </task>
     <task id="LOCAL-00001" summary="user model + registerDTO">
       <option name="closed" value="true" />
@@ -162,7 +155,15 @@
       <option name="project" value="LOCAL" />
       <updated>1712527789681</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="gymaGTO, PersonDTO, pubRouter, get_last_three_gyma_entry">
+      <option name="closed" value="true" />
+      <created>1712611020949</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1712611020949</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -188,9 +189,10 @@
     <MESSAGE value="gitignore" />
     <MESSAGE value="push all for remote work" />
     <MESSAGE value="gymaDTO,  CORS, api v1" />
-    <option name="LAST_COMMIT_MESSAGE" value="gymaDTO,  CORS, api v1" />
+    <MESSAGE value="gymaGTO, PersonDTO, pubRouter, get_last_three_gyma_entry" />
+    <option name="LAST_COMMIT_MESSAGE" value="gymaGTO, PersonDTO, pubRouter, get_last_three_gyma_entry" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/gymaapi$gymaapi.coverage" NAME="gymaapi Coverage Results" MODIFIED="1712501029189" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/gymaapi$gymaapi.coverage" NAME="gymaapi Coverage Results" MODIFIED="1712612535795" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
   </component>
 </project>
