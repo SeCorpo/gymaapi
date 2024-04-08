@@ -7,7 +7,7 @@ class Gyma(Base):
     """ Activity of going to the gym. """
     __tablename__ = 'gyma'
 
-    gyma_id = Column("gyma_id", Integer, primary_key=True, autoincrement=True, nullable=False)
+    gyma_id = Column("gyma_id", Integer, primary_key=True, autoincrement=True, nullable=False, index=True)
     person_id = Column(Integer, ForeignKey("person.person_id"), nullable=False)
     time_of_arrival = Column("time_of_arrival", DateTime, nullable=False)
     time_of_leaving = Column("time_of_leaving", DateTime, nullable=True)

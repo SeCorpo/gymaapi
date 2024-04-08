@@ -4,13 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5ef567d6-6873-43d9-9b0e-2a9dfae214f4" name="Changes" comment="push all for remote work">
-      <change afterPath="$PROJECT_DIR$/dto/gymaDTO.py" afterDir="false" />
+    <list default="true" id="5ef567d6-6873-43d9-9b0e-2a9dfae214f4" name="Changes" comment="gymaDTO,  CORS, api v1">
+      <change afterPath="$PROJECT_DIR$/dto/personDTO.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/router/pubRouter.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/service/pubService.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/router/authRouter.py" beforeDir="false" afterPath="$PROJECT_DIR$/router/authRouter.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dto/gymaDTO.py" beforeDir="false" afterPath="$PROJECT_DIR$/dto/gymaDTO.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/Gyma.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/Gyma.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/Person.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/Person.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/User.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/User.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/router/gymaRouter.py" beforeDir="false" afterPath="$PROJECT_DIR$/router/gymaRouter.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/router/userRouter.py" beforeDir="false" afterPath="$PROJECT_DIR$/router/userRouter.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,6 +35,9 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="ProjectErrors" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
 }</component>
@@ -43,30 +49,31 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;FastAPI.gymaapi.executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.test_main | #2.executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.test_main | #3.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/secorp/sd/gymaapi/session&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "FastAPI.gymaapi.executor": "Run",
+    "HTTP Request.test_main | #2.executor": "Run",
+    "HTTP Request.test_main | #3.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "/home/secorp/sd/gymaapi/session",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "run.code.analysis.last.selected.profile": "aDefault",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mysql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/session" />
@@ -121,7 +128,7 @@
       <updated>1711481007314</updated>
       <workItem from="1711481016187" duration="104278000" />
       <workItem from="1712174754754" duration="1179000" />
-      <workItem from="1712421841991" duration="10736000" />
+      <workItem from="1712421841991" duration="22350000" />
     </task>
     <task id="LOCAL-00001" summary="user model + registerDTO">
       <option name="closed" value="true" />
@@ -147,7 +154,15 @@
       <option name="project" value="LOCAL" />
       <updated>1712175552860</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="gymaDTO,  CORS, api v1">
+      <option name="closed" value="true" />
+      <created>1712527789681</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1712527789681</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -172,7 +187,8 @@
     <MESSAGE value="user model + registerDTO" />
     <MESSAGE value="gitignore" />
     <MESSAGE value="push all for remote work" />
-    <option name="LAST_COMMIT_MESSAGE" value="push all for remote work" />
+    <MESSAGE value="gymaDTO,  CORS, api v1" />
+    <option name="LAST_COMMIT_MESSAGE" value="gymaDTO,  CORS, api v1" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/gymaapi$gymaapi.coverage" NAME="gymaapi Coverage Results" MODIFIED="1712501029189" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />

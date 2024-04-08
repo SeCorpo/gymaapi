@@ -6,7 +6,7 @@ router = APIRouter(prefix="/api/v1/gyma", tags=["gyma"])
 
 
 @router.post("/start", status_code=201)
-def start_gyma(
+async def start_gyma(
     # person id from session
 ):
     return
