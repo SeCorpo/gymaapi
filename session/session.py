@@ -64,15 +64,17 @@ async def get_person_id_from_session_data(key) -> int:
         logging.error(f"Invalid session data format: {e}")
 
 
-async def get_gyma_id_from_session_data(key) -> int:
+async def get_gyma_id_from_session_data(key) -> int | None:
     try:
         session_data_object = await get_session_data(key)
-        return session_data_object.gyma_id
+        gyma_id = session_data_object.gyma_id
+        if gyma_id is None:
+            return None
     except pydantic.ValidationError as e:
         logging.error(f"Invalid session data format: {e}")
 
 
-async def set_session(session_data: SessionDataObject) -> str | None:
+async def set_session(session_data: SessionDataObject, key: str | None = None) -> str | None:
     """ Stores session data in Redis with a randomly generated key and expiration time. """
     try:
         redis_connection = await create_redis_connection()
@@ -80,7 +82,9 @@ async def set_session(session_data: SessionDataObject) -> str | None:
             logging.error(f"Redis connection failed")
             return None
 
-        key = generate_random_key()
+        if key is None:
+            key = generate_random_key()
+
         data_dict = {k: v for k, v in session_data.dict().items() if v is not None}
         async with redis_connection:
             await redis_connection.hmset(key, data_dict)
@@ -90,6 +94,16 @@ async def set_session(session_data: SessionDataObject) -> str | None:
     except RedisError as e:
         logging.error(f"Error setting session data in Redis: {e}")
         return None
+
+
+async def set_gyma_id_in_session(key, gyma_id: int) -> str | None:
+    """ Adds a gyma_id to the existing session data. """
+    session_data = await get_session_data(key)
+    if session_data.gyma_id is not None:
+        return None
+
+    session_data.gyma_id = gyma_id
+    return await set_session(session_data, key)
 
 
 def generate_random_key(length: int = 16) -> str:
