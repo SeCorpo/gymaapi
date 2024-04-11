@@ -10,3 +10,10 @@ async def start_gyma(
     # person id from session
 ):
     return
+
+
+@router.put("/end", status_code=204)
+async def end_gyma(
+        #sessionkey
+):
+    return
