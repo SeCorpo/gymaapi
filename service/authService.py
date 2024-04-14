@@ -1,16 +1,13 @@
 import base64
-import uuid
 from fastapi import Depends
-from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from model.User import User
 from database import get_db
-from service.userService import get_user_by_email, password_hasher
+from service.userService import get_user_by_email
 import bcrypt
 
 
 async def get_user_id_when_login_ok(email: str, password: str, db: AsyncSession = Depends(get_db)) -> int | None:
-    """ Checking email and password credentials against database. Returns user obj or false. """
+    """ Checking email and password credentials against database. Returns user obj or None. """
     user = await get_user_by_email(email, db)
 
     if user is not None:
@@ -21,6 +18,20 @@ async def get_user_id_when_login_ok(email: str, password: str, db: AsyncSession 
 
         else:
             return None
+    else:
+        return None
+
+
+def get_auth_key(headers: dict[str, str]) -> str | None:
+    """ Get decoded Authentication token from headers as a string. """
+    auth_header = headers.get('Authorization')
+    if not auth_header:
+        return None
+
+    parts = auth_header.split(' ', maxsplit=1)
+    if len(parts) == 2 and parts[0].lower() == 'bearer':
+        decoded_session_key = decode_str(parts[1])
+        return decoded_session_key
     else:
         return None
 

@@ -28,6 +28,16 @@ async def register_user(email: str, password: str, db: AsyncSession = Depends(ge
         return False
 
 
+async def get_user_by_user_id(user_id: int, db: AsyncSession = Depends(get_db)) -> User | None:
+    """ Get User object by user id from database. """
+    try:
+        result = await db.execute(select(User).filter_by(user_id=user_id))
+        user = result.scalar_one()
+        return user
+    except NoResultFound:
+        return None
+
+
 async def get_user_by_email(email: str, db: AsyncSession = Depends(get_db)) -> User | None:
     """ Get User object by email from database. """
     try:

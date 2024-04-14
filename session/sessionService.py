@@ -1,5 +1,4 @@
 import logging
-from datetime import datetime, timedelta
 import string
 import random
 import aioredis
@@ -35,7 +34,7 @@ async def create_redis_connection():
     return _redis_connection
 
 
-async def get_session_data(key) -> SessionDataObject | None:
+async def get_session_data(key: str) -> SessionDataObject | None:
     """ Retrieve the session data as a SessionDataObject from Redis. """
     try:
         redis_connection = await create_redis_connection()
@@ -56,7 +55,7 @@ async def get_session_data(key) -> SessionDataObject | None:
         return None
 
 
-async def get_person_id_from_session_data(key) -> int:
+async def get_person_id_from_session_data(key: str) -> int:
     try:
         session_data_object = await get_session_data(key)
         return session_data_object.person_id
@@ -64,7 +63,7 @@ async def get_person_id_from_session_data(key) -> int:
         logging.error(f"Invalid session data format: {e}")
 
 
-async def get_gyma_id_from_session_data(key) -> int | None:
+async def get_gyma_id_from_session_data(key: str) -> int | None:
     try:
         session_data_object = await get_session_data(key)
         gyma_id = session_data_object.gyma_id
@@ -96,7 +95,7 @@ async def set_session(session_data: SessionDataObject, key: str | None = None) -
         return None
 
 
-async def set_gyma_id_in_session(key, gyma_id: int) -> str | None:
+async def set_gyma_id_in_session(key: str, gyma_id: int) -> str | None:
     """ Adds a gyma_id to the existing session data. """
     session_data = await get_session_data(key)
     if session_data.gyma_id is not None:
@@ -104,6 +103,24 @@ async def set_gyma_id_in_session(key, gyma_id: int) -> str | None:
 
     session_data.gyma_id = gyma_id
     return await set_session(session_data, key)
+
+
+async def delete_session(key: str) -> bool:
+    """ Deletes the session data from Redis. """
+    try:
+        redis_connection = await create_redis_connection()
+        if redis_connection is None:
+            logging.error(f"Redis connection failed")
+            return False
+
+        if key and await get_session_data(key) is not None:
+            async with redis_connection:
+                await redis_connection.delete(key)
+                return True
+
+    except RedisError as e:
+        logging.error(f"Error deleting session data in Redis (key: {key}): {e}")
+        return False
 
 
 def generate_random_key(length: int = 16) -> str:

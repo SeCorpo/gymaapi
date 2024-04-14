@@ -2,9 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException
 from database import get_db
 from sqlalchemy.ext.asyncio import AsyncSession
 import logging
-from service.authService import get_user_id_when_login_ok, encode_str
+from service.authService import get_user_id_when_login_ok, encode_str, get_auth_key
 from dto.loginDTO import LoginDTO
-from session.session import set_session
+from session.sessionService import set_session, delete_session
 from session.sessionDataObject import SessionDataObject
 
 router = APIRouter(prefix="/api/v1/auth", tags=["authentication"])
@@ -27,4 +27,14 @@ async def login(login_dto: LoginDTO, db: AsyncSession = Depends(get_db)):
     encoded_session_key = encode_str(raw_session_key)
 
     return {"session_token": encoded_session_key}
+
+
+@router.post("/logout", status_code=200)
+async def logout(auth_token: str | None = Depends(get_auth_key)):
+    logging.info("Attempting logout and session deletion")
+
+    if auth_token is None:
+        raise HTTPException(status_code=404, detail="Session does not exist")
+
+    return await delete_session(auth_token)
 
