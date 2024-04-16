@@ -1,5 +1,7 @@
 import base64
-from fastapi import Depends
+import logging
+
+from fastapi import Depends, Header
 from sqlalchemy.ext.asyncio import AsyncSession
 from database import get_db
 from service.userService import get_user_by_email
@@ -22,16 +24,13 @@ async def get_user_id_when_login_ok(email: str, password: str, db: AsyncSession 
         return None
 
 
-def get_auth_key(headers: dict[str, str]) -> str | None:
+def get_auth_key(authorization: str = Header(default=None)) -> str | None:
     """ Get decoded Authentication token from headers as a string. """
-    auth_header = headers.get('Authorization')
-    if not auth_header:
-        return None
-
-    parts = auth_header.split(' ', maxsplit=1)
-    if len(parts) == 2 and parts[0].lower() == 'bearer':
-        decoded_session_key = decode_str(parts[1])
-        return decoded_session_key
+    if authorization:
+        logging.info(authorization)
+        decoded_key = decode_str(authorization)
+        logging.info(decoded_key)
+        return decoded_key
     else:
         return None
 

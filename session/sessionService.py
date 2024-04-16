@@ -116,6 +116,7 @@ async def delete_session(key: str) -> bool:
         if key and await get_session_data(key) is not None:
             async with redis_connection:
                 await redis_connection.delete(key)
+                logging.info(f"Deleted session data from Redis: {key}")
                 return True
 
     except RedisError as e:
