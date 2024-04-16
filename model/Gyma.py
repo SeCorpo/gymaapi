@@ -11,9 +11,9 @@ class Gyma(Base):
     person_id = Column(Integer, ForeignKey("person.person_id"), nullable=False)
     time_of_arrival = Column("time_of_arrival", DateTime, nullable=False)
     time_of_leaving = Column("time_of_leaving", DateTime, nullable=True)
-    location_id = Column(Integer, ForeignKey("location.location_id"), nullable=True)
+    # location_id = Column(Integer, ForeignKey("location.location_id"), nullable=True)
 
-    location = relationship("Location", backref="gyma")
+    # location = relationship("Location", backref="gyma")
     gyma_exercises = relationship("GymaExercise", back_populates="gyma")
     exercises = relationship("Exercise", secondary="gyma_exercise")
 
