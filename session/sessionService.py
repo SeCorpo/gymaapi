@@ -85,7 +85,7 @@ async def set_session(session_data: SessionDataObject, key: str | None = None) -
             return None
 
         if key is None:
-            key = generate_random_key()
+            key = await generate_random_key()
 
         data_dict = {k: v for k, v in session_data.dict().items() if v is not None}
         async with redis_connection:
@@ -132,7 +132,13 @@ async def delete_session(key: str) -> bool:
         return False
 
 
-def generate_random_key(length: int = 16) -> str:
-    """Generates a random alphanumeric string for use as a session key. """
+async def generate_random_key(length: int = 16) -> str:
+    """Generates a random alphanumeric string for use as a session key and makes sure it's not already used. """
+    logging.info("Generating random key for session key")
     letters_and_digits = string.ascii_letters + string.digits
-    return ''.join(random.choice(letters_and_digits) for _ in range(length))
+    key = ''.join(random.choice(letters_and_digits) for _ in range(length))
+
+    if await get_session_data(key) is None:
+        return key
+    else:
+        await generate_random_key()

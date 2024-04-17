@@ -1,6 +1,6 @@
 from database import Base
 from sqlalchemy.orm import relationship
-from sqlalchemy import Column, Integer, VARCHAR, Enum, DateTime
+from sqlalchemy import Column, Integer, VARCHAR, Enum, DateTime, Float
 
 
 class Exercise(Base):
@@ -12,9 +12,9 @@ class Exercise(Base):
     exercise_type = Column("exercise_type", Enum('gains', 'cardio', 'other'), nullable=False)
     count = Column("count", Integer, nullable=True)
     sets = Column("sets", Integer, nullable=True)
-    weight = Column("weight", Integer, nullable=True)
+    weight = Column("weight", Float, nullable=True)
     minutes = Column("minutes", Integer, nullable=True)
-    km = Column("km", Integer, nullable=True)
+    km = Column("km", Float, nullable=True)
     level = Column("level", Integer, nullable=True)
     description = Column("description", VARCHAR(64), nullable=True)
     created_at = Column("created_at", DateTime, nullable=False)

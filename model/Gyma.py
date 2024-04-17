@@ -36,16 +36,16 @@ class Gyma(Base):
         else:
             raise ValueError("No exercises found for this gyma")
 
-    def get_gyma_city(self):
-        """ Returns the city name of gyma, if it exists."""
-        if self.location:
-            return self.location.city
-        else:
-            raise ValueError("No city found for this gyma")
-
-    def get_gyma_country(self):
-        """ Returns the country of gyma, if it exists."""
-        if self.location:
-            return self.location.country
-        else:
-            raise ValueError("No country found for this gyma")
+    # def get_gyma_city(self):
+    #     """ Returns the city name of gyma, if it exists."""
+    #     if self.location:
+    #         return self.location.city
+    #     else:
+    #         raise ValueError("No city found for this gyma")
+    #
+    # def get_gyma_country(self):
+    #     """ Returns the country of gyma, if it exists."""
+    #     if self.location:
+    #         return self.location.country
+    #     else:
+    #         raise ValueError("No country found for this gyma")

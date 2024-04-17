@@ -25,6 +25,7 @@ async def register_user(email: str, password: str, db: AsyncSession = Depends(ge
 
     except Exception as e:
         logging.error(e)
+        await db.rollback()
         return False
 
 
