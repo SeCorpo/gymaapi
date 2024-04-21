@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Body
 import logging
 
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -7,7 +7,7 @@ from dto.exerciseDTO import ExerciseDTO
 from dto.gymaDTO import GymaDTO
 from service.authService import get_auth_key
 from session.sessionService import get_user_id_from_session_data, set_gyma_id_in_session, get_session_data
-from service.gymaService import new_gyma_in_db, set_time_of_departure, add_exercise_plus_to_gyma
+from service.gymaService import new_gyma_in_db, set_time_of_departure, add_exercise, associate_exercise_with_gyma
 
 router = APIRouter(prefix="/api/v1/gyma", tags=["gyma"])
 
@@ -49,9 +49,24 @@ async def end_gyma(auth_token: str | None = Depends(get_auth_key),
     return HTTPException(status_code=404, detail="Gyma cannot be removed from session")
 
 
+@router.post("/exercise")
+async def add_exercise_to_gyma(exercise_dto: ExerciseDTO = Body(...),
+                               auth_token: str | None = Depends(get_auth_key),
+                               db: AsyncSession = Depends(get_db)):
 
+    if auth_token is None:
+        raise HTTPException(status_code=400, detail="Session does not exist")
 
+    session_data = await get_session_data(auth_token)
+    if session_data.gyma_id is None:
+        raise HTTPException(status_code=400, detail="Gyma does not exist in session")
 
+    exercise = await add_exercise(exercise_dto, db)
+    if exercise is None:
+        raise HTTPException(status_code=400, detail="Exercise cannot be added")
 
+    # associate_with_gyma = await associate_exercise_with_gyma(exercise, session_data.gyma_id, db)
+    # if not associate_with_gyma:
+    #     raise HTTPException(status_code=400, detail="Failed to associate exercise with gyma")
 
-
+    return exercise

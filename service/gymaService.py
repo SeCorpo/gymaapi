@@ -67,17 +67,10 @@ async def set_time_of_departure(user_id: int, gyma_id: int, db: AsyncSession = D
         return None
 
 
-async def add_exercise_plus_to_gyma(gyma_id: int, user_id: int, exercise_dto: ExerciseDTO,
-                                    db: AsyncSession = Depends(get_db)) -> Exercise | None:
-    """ Add exercise to db and makes the connection to gyma, so that there won't be loose exercises """
+async def add_exercise(exercise_dto: ExerciseDTO,
+                       db: AsyncSession = Depends(get_db)) -> Exercise | None:
+    """ Add exercise to db """
     try:
-        gyma = await get_gyma_by_gyma_id(gyma_id, db)
-        if gyma is None:
-            return None
-
-        if gyma.user_id is not user_id:
-            return None
-
         exercise = Exercise(
             exercise_name=exercise_dto.exercise_name,
             exercise_type=exercise_dto.exercise_type,
@@ -90,14 +83,32 @@ async def add_exercise_plus_to_gyma(gyma_id: int, user_id: int, exercise_dto: Ex
             description=exercise_dto.description,
             created_at=datetime.datetime.now()
         )
+
         db.add(exercise)
-
-        gyma_exercise = GymaExercise(exercise_id=exercise.exercise_id, gyma_id=gyma.gyma_id)
-        db.add(gyma_exercise)
-
         await db.commit()
+        await db.refresh(exercise)
         return exercise
+
     except Exception as e:
         logging.error(e)
         await db.rollback()
         return None
+
+
+async def associate_exercise_with_gyma(exercise: Exercise, gyma_id: int,
+                                       db: AsyncSession = Depends(get_db)) -> bool:
+    """ Associate exercise with gyma """
+    try:
+        gyma = await get_gyma_by_gyma_id(gyma_id, db)
+        if gyma is None:
+            return False
+
+        gyma_exercise = GymaExercise(exercise_id=exercise.exercise_id, gyma_id=gyma.gyma_id)
+        db.add(gyma_exercise)
+
+        return True
+
+    except Exception as e:
+        logging.error(e)
+        await db.rollback()
+        return False

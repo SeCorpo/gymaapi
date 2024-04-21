@@ -9,8 +9,8 @@ from dto.personDTO import PersonDTO
 
 class GymaDTO(BaseModel):
     gyma_id: int = Field(...)  # gyma_id is used to exclude sending gyma from db when client has them in localstorage
-    person: PersonDTO = Field(default=None)
+    person: PersonDTO | None = Field(default=None)
     time_of_arrival: datetime = Field(...)
     time_of_leaving: datetime | None = Field(default=None)
-    exercises: List[ExerciseDTO] = Field(default=None)
+    exercises: List[ExerciseDTO] = Field(default_factory=list)
 
