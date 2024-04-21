@@ -3,4 +3,6 @@
 1. Models-classes don't directly interact with get_db
 2. Always send the minimum and only if used personal data to client
 3. never end on return True
-4. 
+4. Routers do not use db directly
+5. Services perform query's to db
+6. 

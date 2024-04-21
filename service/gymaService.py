@@ -11,7 +11,6 @@ from database import get_db
 from dto.exerciseDTO import ExerciseDTO
 from model.Exercise import Exercise
 from model.Gyma import Gyma
-import datetime
 
 
 async def get_gyma_by_gyma_id(gyma_id: int, db: AsyncSession = Depends(get_db)) -> Gyma | None:
@@ -24,7 +23,7 @@ async def get_gyma_by_gyma_id(gyma_id: int, db: AsyncSession = Depends(get_db)) 
         return None
 
 
-async def new_gyma_in_db(user_id: int | None, db: AsyncSession = Depends(get_db)) -> Gyma | None:
+async def add_gyma(user_id: int | None, db: AsyncSession = Depends(get_db)) -> Gyma | None:
     if user_id is None:
         raise Exception("Gyma requires a person_id")
 
@@ -44,7 +43,7 @@ async def new_gyma_in_db(user_id: int | None, db: AsyncSession = Depends(get_db)
         return None
 
 
-async def set_time_of_departure(user_id: int, gyma_id: int, db: AsyncSession = Depends(get_db)) -> Optional[datetime]:
+async def set_time_of_leaving(user_id: int, gyma_id: int, db: AsyncSession = Depends(get_db)) -> Optional[datetime]:
     try:
         gyma = await get_gyma_by_gyma_id(gyma_id, db)
         if gyma is None:
@@ -53,47 +52,13 @@ async def set_time_of_departure(user_id: int, gyma_id: int, db: AsyncSession = D
         if gyma.user_id is not user_id:
             raise Exception("Gyma can only be altered by its owner")
 
-        if gyma.time_of_departure is not None:
+        if gyma.time_of_leaving is not None:
             return None
 
-        gyma.time_of_departure = datetime.now()
+        gyma.time_of_leaving = datetime.now()
         await db.commit()
         await db.refresh(gyma)
-        return gyma.time_of_departure
-
-    except Exception as e:
-        logging.error(e)
-        await db.rollback()
-        return None
-
-
-async def add_exercise(gyma_id: int, exercise_dto: ExerciseDTO,
-                       db: AsyncSession = Depends(get_db)) -> Exercise | None:
-    """ Add exercise to db """
-    gyma = await get_gyma_by_gyma_id(gyma_id, db)
-    if gyma is None:
-        return None
-
-    try:
-        exercise = Exercise(
-            gyma_id=gyma_id,
-            exercise_name=exercise_dto.exercise_name,
-            exercise_type=exercise_dto.exercise_type,
-            count=exercise_dto.count,
-            sets=exercise_dto.sets,
-            weight=exercise_dto.weight,
-            minutes=exercise_dto.minutes,
-            km=exercise_dto.km,
-            level=exercise_dto.level,
-            description=exercise_dto.description,
-            created_at=datetime.datetime.now()
-        )
-
-        db.add(exercise)
-        await db.commit()
-        await db.refresh(exercise)
-
-        return exercise
+        return gyma.time_of_leaving
 
     except Exception as e:
         logging.error(e)

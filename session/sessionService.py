@@ -110,7 +110,7 @@ async def set_gyma_id_in_session(key: str, gyma_id: int | None) -> bool:
         return True
 
     logging.error("Unable to set gyma_id to session data")
-    return True
+    return False
 
 
 async def delete_session(key: str) -> bool:

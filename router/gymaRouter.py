@@ -6,8 +6,9 @@ from database import get_db
 from dto.exerciseDTO import ExerciseDTO
 from dto.gymaDTO import GymaDTO
 from service.authService import get_auth_key
+from service.exerciseService import add_exercise
 from session.sessionService import get_user_id_from_session_data, set_gyma_id_in_session, get_session_data
-from service.gymaService import new_gyma_in_db, set_time_of_departure, add_exercise
+from service.gymaService import add_gyma, set_time_of_leaving
 
 router = APIRouter(prefix="/api/v1/gyma", tags=["gyma"])
 
@@ -20,7 +21,7 @@ async def start_gyma(auth_token: str | None = Depends(get_auth_key),
         raise HTTPException(status_code=404, detail="Session does not exist")
 
     user_id = await get_user_id_from_session_data(auth_token)
-    gyma = await new_gyma_in_db(user_id, db)
+    gyma = await add_gyma(user_id, db)
 
     logging.info(f"New gyma_id: {gyma.gyma_id}")
 
@@ -41,10 +42,10 @@ async def end_gyma(auth_token: str | None = Depends(get_auth_key),
     if session_data.gyma_id is None:
         raise HTTPException(status_code=404, detail="Gyma does not exist in session")
 
-    time_of_departure = await set_time_of_departure(session_data.user_id, session_data.gyma_id, db)
+    time_of_leaving = await set_time_of_leaving(session_data.user_id, session_data.gyma_id, db)
 
-    if await set_gyma_id_in_session(auth_token, None):
-        return {"time_of_departure": time_of_departure}
+    if await set_gyma_id_in_session(key=auth_token, gyma_id=None):
+        return {"time_of_leaving": time_of_leaving}
 
     return HTTPException(status_code=404, detail="Gyma cannot be removed from session")
 
