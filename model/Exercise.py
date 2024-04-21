@@ -1,6 +1,5 @@
 from database import Base
-from sqlalchemy.orm import relationship
-from sqlalchemy import Column, Integer, VARCHAR, Enum, DateTime, Float
+from sqlalchemy import Column, Integer, VARCHAR, Enum, DateTime, Float, ForeignKey
 
 
 class Exercise(Base):
@@ -8,6 +7,7 @@ class Exercise(Base):
     __tablename__ = 'exercise'
 
     exercise_id = Column("exercise_id", Integer, primary_key=True, autoincrement=True)
+    gyma_id = Column(Integer, ForeignKey('gyma.gyma_id'), nullable=False, index=True)
     exercise_name = Column("exercise_name", VARCHAR(64), nullable=False)
     exercise_type = Column("exercise_type", Enum('gains', 'cardio', 'other'), nullable=False)
     count = Column("count", Integer, nullable=True)

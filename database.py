@@ -17,7 +17,7 @@ DB_DRIVER = os.getenv("DB_DRIVER", "aiomysql")
 DATABASE_URL = f"mysql+{DB_DRIVER}://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
 
-engine = create_async_engine(DATABASE_URL, echo=True)
+engine = create_async_engine(DATABASE_URL, echo=False)
 
 
 AsyncSessionLocal = sessionmaker(

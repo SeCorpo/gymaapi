@@ -1,4 +1,6 @@
 import logging
+from datetime import datetime
+from typing import Optional
 
 from fastapi import Depends
 from sqlalchemy import select
@@ -10,8 +12,6 @@ from dto.exerciseDTO import ExerciseDTO
 from model.Exercise import Exercise
 from model.Gyma import Gyma
 import datetime
-
-from model.GymaExercise import GymaExercise
 
 
 async def get_gyma_by_gyma_id(gyma_id: int, db: AsyncSession = Depends(get_db)) -> Gyma | None:
@@ -31,7 +31,7 @@ async def new_gyma_in_db(user_id: int | None, db: AsyncSession = Depends(get_db)
     try:
         new_gyma = Gyma(
             user_id=user_id,
-            time_of_arrival=datetime.datetime.now()
+            time_of_arrival=datetime.now()
         )
         db.add(new_gyma)
         await db.commit()
@@ -44,7 +44,7 @@ async def new_gyma_in_db(user_id: int | None, db: AsyncSession = Depends(get_db)
         return None
 
 
-async def set_time_of_departure(user_id: int, gyma_id: int, db: AsyncSession = Depends(get_db)) -> Gyma | None:
+async def set_time_of_departure(user_id: int, gyma_id: int, db: AsyncSession = Depends(get_db)) -> Optional[datetime]:
     try:
         gyma = await get_gyma_by_gyma_id(gyma_id, db)
         if gyma is None:
@@ -56,10 +56,10 @@ async def set_time_of_departure(user_id: int, gyma_id: int, db: AsyncSession = D
         if gyma.time_of_departure is not None:
             return None
 
-        gyma.time_of_departure = datetime.datetime.now()
+        gyma.time_of_departure = datetime.now()
         await db.commit()
         await db.refresh(gyma)
-        return gyma
+        return gyma.time_of_departure
 
     except Exception as e:
         logging.error(e)
@@ -67,11 +67,16 @@ async def set_time_of_departure(user_id: int, gyma_id: int, db: AsyncSession = D
         return None
 
 
-async def add_exercise(exercise_dto: ExerciseDTO,
+async def add_exercise(gyma_id: int, exercise_dto: ExerciseDTO,
                        db: AsyncSession = Depends(get_db)) -> Exercise | None:
     """ Add exercise to db """
+    gyma = await get_gyma_by_gyma_id(gyma_id, db)
+    if gyma is None:
+        return None
+
     try:
         exercise = Exercise(
+            gyma_id=gyma_id,
             exercise_name=exercise_dto.exercise_name,
             exercise_type=exercise_dto.exercise_type,
             count=exercise_dto.count,
@@ -87,28 +92,10 @@ async def add_exercise(exercise_dto: ExerciseDTO,
         db.add(exercise)
         await db.commit()
         await db.refresh(exercise)
+
         return exercise
 
     except Exception as e:
         logging.error(e)
         await db.rollback()
         return None
-
-
-async def associate_exercise_with_gyma(exercise: Exercise, gyma_id: int,
-                                       db: AsyncSession = Depends(get_db)) -> bool:
-    """ Associate exercise with gyma """
-    try:
-        gyma = await get_gyma_by_gyma_id(gyma_id, db)
-        if gyma is None:
-            return False
-
-        gyma_exercise = GymaExercise(exercise_id=exercise.exercise_id, gyma_id=gyma.gyma_id)
-        db.add(gyma_exercise)
-
-        return True
-
-    except Exception as e:
-        logging.error(e)
-        await db.rollback()
-        return False
