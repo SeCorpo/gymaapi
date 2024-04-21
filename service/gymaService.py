@@ -24,31 +24,33 @@ async def get_gyma_by_gyma_id(gyma_id: int, db: AsyncSession = Depends(get_db)) 
         return None
 
 
-async def new_gyma_in_db(person_id: int | None, db: AsyncSession = Depends(get_db)) -> Gyma | None:
-    if person_id is None:
+async def new_gyma_in_db(user_id: int | None, db: AsyncSession = Depends(get_db)) -> Gyma | None:
+    if user_id is None:
         raise Exception("Gyma requires a person_id")
 
     try:
         new_gyma = Gyma(
-            person_id=person_id,
+            user_id=user_id,
             time_of_arrival=datetime.datetime.now()
         )
         db.add(new_gyma)
         await db.commit()
+        await db.refresh(new_gyma)
         return new_gyma
     except Exception as e:
         logging.error(e)
+        logging.info("new_gyma_in_db: Failed to create Gyma")
         await db.rollback()
         return None
 
 
-async def set_time_of_departure(person_id: int, gyma_id: int, db: AsyncSession = Depends(get_db)) -> Gyma | None:
+async def set_time_of_departure(user_id: int, gyma_id: int, db: AsyncSession = Depends(get_db)) -> Gyma | None:
     try:
         gyma = await get_gyma_by_gyma_id(gyma_id, db)
         if gyma is None:
             return None
 
-        if gyma.person_id is not person_id:
+        if gyma.user_id is not user_id:
             raise Exception("Gyma can only be altered by its owner")
 
         if gyma.time_of_departure is not None:
@@ -56,6 +58,7 @@ async def set_time_of_departure(person_id: int, gyma_id: int, db: AsyncSession =
 
         gyma.time_of_departure = datetime.datetime.now()
         await db.commit()
+        await db.refresh(gyma)
         return gyma
 
     except Exception as e:
@@ -64,7 +67,7 @@ async def set_time_of_departure(person_id: int, gyma_id: int, db: AsyncSession =
         return None
 
 
-async def add_exercise_plus_to_gyma(gyma_id: int, person_id: int, exercise_dto: ExerciseDTO,
+async def add_exercise_plus_to_gyma(gyma_id: int, user_id: int, exercise_dto: ExerciseDTO,
                                     db: AsyncSession = Depends(get_db)) -> Exercise | None:
     """ Add exercise to db and makes the connection to gyma, so that there won't be loose exercises """
     try:
@@ -72,7 +75,7 @@ async def add_exercise_plus_to_gyma(gyma_id: int, person_id: int, exercise_dto: 
         if gyma is None:
             return None
 
-        if gyma.person_id is not person_id:
+        if gyma.user_id is not user_id:
             return None
 
         exercise = Exercise(

@@ -4,10 +4,10 @@ from pydantic import BaseModel, Field
 class ExerciseDTO(BaseModel):
     exercise_name: str
     exercise_type: str
-    count: int = Field(default=None)
-    sets: int = Field(default=None)
-    weight: float = Field(default=None)
-    minutes: int = Field(default=None)
-    km: float = Field(default=None)
-    level: int = Field(default=None)
-    description: str = Field(default=None)
+    count: int | None = Field(default=None)
+    sets: int | None = Field(default=None)
+    weight: float | None = Field(default=None)
+    minutes: int | None = Field(default=None)
+    km: float | None = Field(default=None)
+    level: int | None = Field(default=None)
+    description: str | None = Field(default=None)

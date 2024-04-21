@@ -6,8 +6,8 @@ from database import get_db
 
 from dto.gymaDTO import GymaDTO
 from service.authService import get_auth_key
-from service.mineService import get_last_three_gyma_entry_of_person
-from session.sessionService import get_person_id_from_session_data
+from service.mineService import get_last_three_gyma_entry_of_user
+from session.sessionService import get_user_id_from_session_data
 
 router = APIRouter(prefix="/api/v1/mine", tags=["mine"])
 
@@ -18,5 +18,5 @@ async def get_mine_three_latest(gyma_keys: str = None,
                                 db: AsyncSession = Depends(get_db)):
     logging.info(f"Searching for the latest three gyma entries {'excluding: ' + gyma_keys if gyma_keys else ''}")
 
-    person_id: int = await get_person_id_from_session_data(auth_token)
-    return await get_last_three_gyma_entry_of_person(person_id, gyma_keys, db)
+    user_id: int = await get_user_id_from_session_data(auth_token)
+    return await get_last_three_gyma_entry_of_user(user_id, gyma_keys, db)

@@ -18,8 +18,8 @@ async def login(login_dto: LoginDTO, db: AsyncSession = Depends(get_db)):
     if user_id_of_ok_credentials is None:
         raise HTTPException(status_code=401, detail="Incorrect email or password")
 
-    session_object_only_person_id = SessionDataObject(person_id=user_id_of_ok_credentials)
-    raw_session_key = await set_session(session_object_only_person_id)
+    session_object_only_user_id = SessionDataObject(user_id=user_id_of_ok_credentials)
+    raw_session_key = await set_session(session_object_only_user_id)
 
     if raw_session_key is None:
         raise HTTPException(status_code=500, detail="Unable to login, please try later")
@@ -32,7 +32,6 @@ async def login(login_dto: LoginDTO, db: AsyncSession = Depends(get_db)):
 @router.post("/logout", status_code=200)
 async def logout(auth_token: str | None = Depends(get_auth_key)):
     logging.info("Attempting logout and session deletion")
-
     if auth_token is None:
         raise HTTPException(status_code=404, detail="Session does not exist")
 

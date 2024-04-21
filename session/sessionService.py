@@ -55,10 +55,10 @@ async def get_session_data(key: str) -> SessionDataObject | None:
         return None
 
 
-async def get_person_id_from_session_data(key: str) -> int | None:
+async def get_user_id_from_session_data(key: str) -> int | None:
     try:
-        session_data_object = await get_session_data(key)
-        return session_data_object.person_id
+        session_data_object: SessionDataObject = await get_session_data(key)
+        return session_data_object.user_id
     except pydantic.ValidationError as e:
         logging.error(f"Invalid session data format: {e}")
         return None
@@ -66,7 +66,7 @@ async def get_person_id_from_session_data(key: str) -> int | None:
 
 async def get_gyma_id_from_session_data(key: str) -> int | None:
     try:
-        session_data_object = await get_session_data(key)
+        session_data_object: SessionDataObject = await get_session_data(key)
         gyma_id = session_data_object.gyma_id
         if gyma_id is None:
             return None
@@ -100,7 +100,7 @@ async def set_session(session_data: SessionDataObject, key: str | None = None) -
 
 async def set_gyma_id_in_session(key: str, gyma_id: int | None) -> bool:
     """ Adds a gyma_id to the existing session data. """
-    session_data = await get_session_data(key)
+    session_data: SessionDataObject = await get_session_data(key)
     if gyma_id is not None and session_data.gyma_id is not None:
         return False
 

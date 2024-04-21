@@ -8,8 +8,8 @@ from database import get_db
 from model.Gyma import Gyma
 
 
-async def get_last_three_gyma_entry_of_person(person_id: int, gyma_keys: str = None,
-                                              db: AsyncSession = Depends(get_db)) -> List[Gyma] | None:
+async def get_last_three_gyma_entry_of_user(user_id: int, gyma_keys: str = None,
+                                            db: AsyncSession = Depends(get_db)) -> List[Gyma] | None:
     """ Get last three gyma entries of person by time_of_leaving,
     exclude gyma_keys, for the client already has them. """
 
@@ -18,7 +18,7 @@ async def get_last_three_gyma_entry_of_person(person_id: int, gyma_keys: str = N
             select(Gyma)
             .order_by(desc(Gyma.time_of_leaving))
             .limit(3)
-            .where(Gyma.person_id is person_id)
+            .where(Gyma.user_id is user_id)
             .filter(Gyma.gyma_id.notin_(gyma_keys.split(",") if gyma_keys else []))
         )
 
