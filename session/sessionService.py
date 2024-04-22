@@ -98,10 +98,10 @@ async def set_session(session_data: SessionDataObject, key: str | None = None) -
         return None
 
 
-async def set_gyma_id_in_session(key: str, gyma_id: int | None) -> bool:
-    """ Adds a gyma_id to the existing session data. """
+async def set_gyma_id_in_session(key: str, gyma_id: int) -> bool:
+    """ Adds gyma_id to the existing session data. """
     session_data: SessionDataObject = await get_session_data(key)
-    if gyma_id is not None and session_data.gyma_id is not None:
+    if session_data is None:
         return False
 
     session_data.gyma_id = gyma_id
@@ -111,6 +111,25 @@ async def set_gyma_id_in_session(key: str, gyma_id: int | None) -> bool:
 
     logging.error("Unable to set gyma_id to session data")
     return False
+
+
+async def delete_gyma_id_from_session(key: str) -> bool:
+    """ Deletes gyma_id from the existing session data. """
+    if key is None:
+        return False
+    session_data: SessionDataObject = await get_session_data(key)
+    if session_data.gyma_id is None:
+        return False
+    try:
+        redis_connection = await create_redis_connection()
+        if redis_connection is None:
+            logging.error(f"Redis connection failed")
+            return False
+        await redis_connection.hdel(key, "gyma_id")
+        await redis_connection.expire(key, expire_time)
+    except RedisError as e:
+        logging.error(f"Error deleting gyma_id from session data: {e}")
+        return False
 
 
 async def delete_session(key: str) -> bool:

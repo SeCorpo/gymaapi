@@ -18,8 +18,9 @@ async def get_last_three_gyma_entry_of_user(user_id: int, gyma_keys: str = None,
             select(Gyma)
             .order_by(desc(Gyma.time_of_leaving))
             .limit(3)
-            .where(Gyma.user_id is user_id)
-            .filter(Gyma.gyma_id.notin_(gyma_keys.split(",") if gyma_keys else []))
+            .where(user_id is user_id)
+            .where(Gyma.gyma_id.notin_(gyma_keys.split(",") if gyma_keys else []))
+            .where(Gyma.time_of_leaving.isnot(None))
         )
 
         result = await db.execute(query)

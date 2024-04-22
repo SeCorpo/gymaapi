@@ -7,7 +7,8 @@ from dto.exerciseDTO import ExerciseDTO
 from dto.gymaDTO import GymaDTO
 from service.authService import get_auth_key
 from service.exerciseService import add_exercise
-from session.sessionService import get_user_id_from_session_data, set_gyma_id_in_session, get_session_data
+from session.sessionService import get_user_id_from_session_data, set_gyma_id_in_session, get_session_data, \
+    delete_gyma_id_from_session
 from service.gymaService import add_gyma, set_time_of_leaving
 
 router = APIRouter(prefix="/api/v1/gyma", tags=["gyma"])
@@ -44,7 +45,7 @@ async def end_gyma(auth_token: str | None = Depends(get_auth_key),
 
     time_of_leaving = await set_time_of_leaving(session_data.user_id, session_data.gyma_id, db)
 
-    if await set_gyma_id_in_session(key=auth_token, gyma_id=None):
+    if await delete_gyma_id_from_session(auth_token):
         return {"time_of_leaving": time_of_leaving}
 
     return HTTPException(status_code=404, detail="Gyma cannot be removed from session")

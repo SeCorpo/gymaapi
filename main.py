@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 from database import AsyncSessionLocal, engine, Base
-from router import userRouter, gymaRouter, authRouter
+from router import userRouter, gymaRouter, authRouter, mineRouter
 
 
 logging.basicConfig(level=logging.DEBUG)
@@ -39,6 +39,7 @@ async def setup_database():
 app.include_router(authRouter.router)
 app.include_router(userRouter.router)
 app.include_router(gymaRouter.router)
+app.include_router(mineRouter.router)
 
 
 @app.get("/")

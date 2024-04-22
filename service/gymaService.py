@@ -2,7 +2,7 @@ import logging
 from datetime import datetime
 from typing import Optional
 
-from fastapi import Depends
+from fastapi import Depends, HTTPException
 from sqlalchemy import select
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -47,13 +47,13 @@ async def set_time_of_leaving(user_id: int, gyma_id: int, db: AsyncSession = Dep
     try:
         gyma = await get_gyma_by_gyma_id(gyma_id, db)
         if gyma is None:
-            return None
+            raise HTTPException(status_code=404, detail="Gyma cannot be found")
 
         if gyma.user_id is not user_id:
-            raise Exception("Gyma can only be altered by its owner")
+            raise HTTPException(status_code=403, detail="Gyma can only be altered by its owner")
 
         if gyma.time_of_leaving is not None:
-            return None
+            raise HTTPException(status_code=400, detail="Gyma time_of_leaving has already been set")
 
         gyma.time_of_leaving = datetime.now()
         await db.commit()
@@ -63,4 +63,4 @@ async def set_time_of_leaving(user_id: int, gyma_id: int, db: AsyncSession = Dep
     except Exception as e:
         logging.error(e)
         await db.rollback()
-        return None
+        raise HTTPException(status_code=500, detail="Failed to set time of_leave")
