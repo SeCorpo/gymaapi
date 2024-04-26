@@ -1,7 +1,7 @@
 import base64
 import logging
 
-from fastapi import Depends, Header
+from fastapi import Depends, Header, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from database import get_db
 from service.userService import get_user_by_email
@@ -24,15 +24,18 @@ async def get_user_id_when_login_ok(email: str, password: str, db: AsyncSession 
         return None
 
 
-def get_auth_key(authorization: str = Header(default=None)) -> str | None:
+def get_auth_key(authorization: str = Header(default=None)) -> str:
     """ Get decoded Authentication token from headers as a string. """
-    if authorization:
-        logging.info(authorization)
+    if not authorization:
+        raise HTTPException(status_code=401, detail="Authentication credentials were not provided.")
+
+    try:
+        logging.info(f"Authorization header received: {authorization}")
         decoded_key = decode_str(authorization)
-        logging.info(decoded_key)
+        logging.info(f"Decoded key: {decoded_key}")
         return decoded_key
-    else:
-        return None
+    except Exception as e:
+        raise HTTPException(status_code=401, detail="Invalid authentication credentials.")
 
 
 def encode_str(text: str) -> str:

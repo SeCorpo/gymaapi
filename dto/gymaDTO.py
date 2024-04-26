@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List
+from typing import List, Optional
 
 from pydantic import BaseModel, Field
 
@@ -8,9 +8,9 @@ from dto.personDTO import PersonDTO
 
 
 class GymaDTO(BaseModel):
-    gyma_id: int = Field(...)  # gyma_id is used to exclude sending gyma from db when client has them in localstorage
-    person: PersonDTO | None = Field(default=None)
-    time_of_arrival: datetime = Field(...)
-    time_of_leaving: datetime | None = Field(default=None)
-    exercises: List[ExerciseDTO] = Field(default_factory=list)
+    gyma_id: int = Field(..., description="Used for excluding gyma to send, when client has them in localstorage")
+    person: Optional[PersonDTO] = None
+    time_of_arrival: datetime
+    time_of_leaving: Optional[datetime] = None
+    exercises: List[ExerciseDTO] = []
 

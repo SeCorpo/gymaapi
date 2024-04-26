@@ -34,6 +34,6 @@ async def logout(auth_token: str | None = Depends(get_auth_key)):
     logging.info("Attempting logout and session deletion")
     if auth_token is None:
         raise HTTPException(status_code=404, detail="Session does not exist")
-
-    return await delete_session(auth_token)
+    else:
+        return await delete_session(auth_token)
 

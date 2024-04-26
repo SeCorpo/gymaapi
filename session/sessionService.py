@@ -7,6 +7,9 @@ import os
 
 from aioredis import RedisError
 from dotenv import load_dotenv
+from fastapi import Depends
+
+from service.authService import get_auth_key
 from session.sessionDataObject import SessionDataObject
 
 load_dotenv()
@@ -34,7 +37,7 @@ async def create_redis_connection():
     return _redis_connection
 
 
-async def get_session_data(key: str) -> SessionDataObject | None:
+async def get_session_data(key: str = Depends(get_auth_key)) -> SessionDataObject | None:
     """ Retrieve the session data as a SessionDataObject from Redis. """
     try:
         redis_connection = await create_redis_connection()

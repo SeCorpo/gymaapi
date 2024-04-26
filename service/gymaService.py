@@ -23,7 +23,7 @@ async def get_gyma_by_gyma_id(gyma_id: int, db: AsyncSession = Depends(get_db)) 
         return None
 
 
-async def add_gyma(user_id: int | None, db: AsyncSession = Depends(get_db)) -> Gyma | None:
+async def add_gyma(user_id: int | None, db: AsyncSession) -> Gyma:
     if user_id is None:
         raise Exception("Gyma requires a person_id")
 
@@ -37,10 +37,9 @@ async def add_gyma(user_id: int | None, db: AsyncSession = Depends(get_db)) -> G
         await db.refresh(new_gyma)
         return new_gyma
     except Exception as e:
-        logging.error(e)
-        logging.info("new_gyma_in_db: Failed to create Gyma")
         await db.rollback()
-        return None
+        logging.error(f"Failed to create Gyma: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 
 async def set_time_of_leaving(user_id: int, gyma_id: int, db: AsyncSession = Depends(get_db)) -> Optional[datetime]:

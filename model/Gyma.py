@@ -11,4 +11,5 @@ class Gyma(Base):
     user_id = Column(Integer, ForeignKey("user.user_id"), nullable=False)
     time_of_arrival = Column("time_of_arrival", DateTime, nullable=False)
     time_of_leaving = Column("time_of_leaving", DateTime, nullable=True)
-    # location_id = Column(Integer, ForeignKey("location.location_id"), nullable=True)
+
+    exercises = relationship("GymaExercise", back_populates="gyma", lazy='selectin')

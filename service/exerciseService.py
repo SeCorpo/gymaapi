@@ -2,7 +2,7 @@ import logging
 from datetime import datetime
 from typing import List
 
-from fastapi import Depends
+from fastapi import Depends, HTTPException
 from sqlalchemy import select
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -10,6 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from database import get_db
 from dto.exerciseDTO import ExerciseDTO
 from model.Exercise import Exercise
+from model.GymaExercise import GymaExercise
 from service.gymaService import get_gyma_by_gyma_id
 
 
@@ -33,16 +34,10 @@ async def get_exercises_by_gyma_id(gyma_id: int, db: AsyncSession = Depends(get_
         return None
 
 
-async def add_exercise(gyma_id: int, exercise_dto: ExerciseDTO,
-                       db: AsyncSession = Depends(get_db)) -> Exercise | None:
-    """ Add exercise to db """
-    gyma = await get_gyma_by_gyma_id(gyma_id, db)
-    if gyma is None:
-        return None
-
+async def add_exercise_db(db: AsyncSession, gyma_id: int, exercise_dto: ExerciseDTO) -> bool:
+    """Add a new exercise to a Gyma and create a record in GymaExercise table."""
     try:
-        exercise = Exercise(
-            gyma_id=gyma_id,
+        new_exercise = Exercise(
             exercise_name=exercise_dto.exercise_name,
             exercise_type=exercise_dto.exercise_type,
             count=exercise_dto.count,
@@ -54,14 +49,18 @@ async def add_exercise(gyma_id: int, exercise_dto: ExerciseDTO,
             description=exercise_dto.description,
             created_at=datetime.now()
         )
-
-        db.add(exercise)
+        db.add(new_exercise)
         await db.commit()
-        await db.refresh(exercise)
+        await db.refresh(new_exercise)
 
-        return exercise
+        gyma_exercise = GymaExercise(gyma_id=gyma_id, exercise_id=new_exercise.exercise_id)
+        db.add(gyma_exercise)
+        await db.commit()
 
+        if gyma_exercise and new_exercise is not None:
+            return True
+        HTTPException(status_code=500, detail="Failed to add new exercise and connection to gyma.")
     except Exception as e:
-        logging.error(e)
+        logging.error(f"Error adding exercise to gyma: {e}")
         await db.rollback()
-        return None
+        return False

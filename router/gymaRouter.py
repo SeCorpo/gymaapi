@@ -6,7 +6,8 @@ from database import get_db
 from dto.exerciseDTO import ExerciseDTO
 from dto.gymaDTO import GymaDTO
 from service.authService import get_auth_key
-from service.exerciseService import add_exercise
+from service.exerciseService import add_exercise_db
+from session.sessionDataObject import SessionDataObject
 from session.sessionService import get_user_id_from_session_data, set_gyma_id_in_session, get_session_data, \
     delete_gyma_id_from_session
 from service.gymaService import add_gyma, set_time_of_leaving
@@ -42,29 +43,27 @@ async def end_gyma(auth_token: str | None = Depends(get_auth_key),
 
     if session_data.gyma_id is None:
         raise HTTPException(status_code=404, detail="Gyma does not exist in session")
-
-    time_of_leaving = await set_time_of_leaving(session_data.user_id, session_data.gyma_id, db)
-
-    if await delete_gyma_id_from_session(auth_token):
-        return {"time_of_leaving": time_of_leaving}
+    else:
+        time_of_leaving = await set_time_of_leaving(session_data.user_id, session_data.gyma_id, db)
+        if await delete_gyma_id_from_session(auth_token):
+            return {"time_of_leaving": time_of_leaving}
 
     return HTTPException(status_code=404, detail="Gyma cannot be removed from session")
 
 
-@router.post("/exercise", response_model=ExerciseDTO, status_code=201)
+@router.post("/exercise", status_code=201)
 async def add_exercise_to_gyma(exercise_dto: ExerciseDTO = Body(...),
-                               auth_token: str | None = Depends(get_auth_key),
+                               session: SessionDataObject = Depends(get_session_data),
                                db: AsyncSession = Depends(get_db)):
 
-    if auth_token is None:
-        raise HTTPException(status_code=400, detail="Session does not exist")
+    if session is None:
+        raise HTTPException(status_code=404, detail="Session does not exist")
 
-    session_data = await get_session_data(auth_token)
-    if session_data.gyma_id is None:
-        raise HTTPException(status_code=400, detail="Gyma does not exist in session")
+    if not session.gyma_id:
+        raise HTTPException(status_code=404, detail="Gyma ID not found in session")
 
-    exercise = await add_exercise(session_data.gyma_id, exercise_dto, db)
-    if exercise is None:
-        raise HTTPException(status_code=400, detail="Exercise cannot be added")
-
-    return exercise
+    added_exercise = await add_exercise_db(db, session.gyma_id, exercise_dto)
+    if added_exercise:
+        return added_exercise
+    else:
+        raise HTTPException(status_code=400, detail="Failed to add exercise")
