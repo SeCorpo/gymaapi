@@ -9,7 +9,7 @@ import bcrypt
 def check_user_credentials(user: User, password: str) -> int | None:
     """ Checking email and password credentials against database. Returns user obj or None. """
 
-    if user or password is None:
+    if user is None or password is None:
         return None
     else:
         hashing_password = bcrypt.hashpw(password.encode('utf-8'), user.salt)
