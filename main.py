@@ -5,6 +5,7 @@ from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 from database import AsyncSessionLocal, engine, Base
 from router import userRouter, gymaRouter, authRouter, mineRouter, pubRouter
+from _test import testRouter
 
 
 logging.basicConfig(level=logging.DEBUG)
@@ -41,6 +42,7 @@ app.include_router(userRouter.router)
 app.include_router(gymaRouter.router)
 app.include_router(mineRouter.router)
 app.include_router(pubRouter.router)
+app.include_router(testRouter.router)
 
 
 @app.get("/")

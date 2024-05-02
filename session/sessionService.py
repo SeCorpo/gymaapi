@@ -23,8 +23,8 @@ async def create_redis_connection():
     global _redis_connection
     if _redis_connection is None:
         redis_host = os.getenv("REDIS_HOST")
-        redis_port = int(os.getenv("REDIS_PORT"))
-        redis_db = int(os.getenv("REDIS_DB"))
+        redis_port = os.getenv("REDIS_PORT")
+        redis_db = os.getenv("REDIS_DB")
 
         try:
             _redis_connection = await aioredis.from_url(
