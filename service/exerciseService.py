@@ -11,10 +11,9 @@ from database import get_db
 from dto.exerciseDTO import ExerciseDTO
 from model.Exercise import Exercise
 from model.GymaExercise import GymaExercise
-from service.gymaService import get_gyma_by_gyma_id
 
 
-async def get_exercise_by_exercise_id(exercise_id: int, db: AsyncSession = Depends(get_db)) -> Exercise | None:
+async def get_exercise_by_exercise_id(db: AsyncSession, exercise_id: int) -> Exercise | None:
     """ Get Exercise object by exercise id from database. """
     try:
         result = await db.execute(select(Exercise).filter_by(exercise_id=exercise_id))
@@ -24,7 +23,7 @@ async def get_exercise_by_exercise_id(exercise_id: int, db: AsyncSession = Depen
         return None
 
 
-async def get_exercises_by_gyma_id(gyma_id: int, db: AsyncSession = Depends(get_db)) -> List[Exercise] | None:
+async def get_exercises_by_gyma_id(db: AsyncSession, gyma_id: int) -> List[Exercise] | None:
     """ Get list of Exercise objects by gyma id from database. """
     try:
         result = await db.execute(select(Exercise).filter_by(gyma_id=gyma_id))

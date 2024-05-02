@@ -9,7 +9,7 @@ import logging
 from model.User import User
 
 
-async def register_user(email: str, password: str, db: AsyncSession = Depends(get_db)) -> bool:
+async def register_user(db: AsyncSession, email: str, password: str) -> bool:
     """ Registers a new user to database. """
     try:
         salt, hashed_password = password_hasher(password)
@@ -29,7 +29,7 @@ async def register_user(email: str, password: str, db: AsyncSession = Depends(ge
         return False
 
 
-async def get_user_by_user_id(user_id: int, db: AsyncSession = Depends(get_db)) -> User | None:
+async def get_user_by_user_id(db: AsyncSession, user_id: int) -> User | None:
     """ Get User object by user id from database. """
     try:
         result = await db.execute(select(User).filter_by(user_id=user_id))
@@ -39,7 +39,7 @@ async def get_user_by_user_id(user_id: int, db: AsyncSession = Depends(get_db)) 
         return None
 
 
-async def get_user_by_email(email: str, db: AsyncSession = Depends(get_db)) -> User | None:
+async def get_user_by_email(db: AsyncSession, email: str) -> User | None:
     """ Get User object by email from database. """
     try:
         result = await db.execute(select(User).filter_by(email=email))
@@ -49,7 +49,7 @@ async def get_user_by_email(email: str, db: AsyncSession = Depends(get_db)) -> U
         return None
 
 
-async def email_available(email: str, db: AsyncSession = Depends(get_db)) -> bool:
+async def email_available(db: AsyncSession, email: str) -> bool:
     """ Check if email is already registered. """
     result = await db.execute(select(User).filter_by(email=email))
     user_exists = result.scalar()

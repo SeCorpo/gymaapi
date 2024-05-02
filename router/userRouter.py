@@ -12,9 +12,9 @@ router = APIRouter(prefix="/api/v1/user", tags=["user"])
 async def register(register_dto: RegisterDTO, db: AsyncSession = Depends(get_db)):
     logging.info("Registering user with email: " + register_dto.email)
 
-    if not await email_available(register_dto.email, db):
+    if not await email_available(db, register_dto.email):
         raise HTTPException(status_code=400, detail="Email is not available")
 
-    return await register_user(register_dto.email, register_dto.password, db)
+    return await register_user(db, register_dto.email, register_dto.password)
 
 

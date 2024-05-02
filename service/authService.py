@@ -1,27 +1,22 @@
 import base64
 import logging
 
-from fastapi import Depends, Header, HTTPException
-from sqlalchemy.ext.asyncio import AsyncSession
-from database import get_db
-from service.userService import get_user_by_email
+from fastapi import Header, HTTPException
+from model.User import User
 import bcrypt
 
 
-async def get_user_id_when_login_ok(email: str, password: str, db: AsyncSession = Depends(get_db)) -> int | None:
+def check_user_credentials(user: User, password: str) -> int | None:
     """ Checking email and password credentials against database. Returns user obj or None. """
-    user = await get_user_by_email(email, db)
 
-    if user is not None:
+    if user or password is None:
+        return None
+    else:
         hashing_password = bcrypt.hashpw(password.encode('utf-8'), user.salt)
-
         if hashing_password == user.password_hash:
             return user.user_id
-
         else:
             return None
-    else:
-        return None
 
 
 def get_auth_key(authorization: str = Header(default=None)) -> str:
