@@ -34,7 +34,7 @@ async def get_exercises_by_gyma_id(db: AsyncSession, gyma_id: int) -> List[Exerc
 
 
 async def add_exercise_db(db: AsyncSession, gyma_id: int, exercise_dto: ExerciseDTO) -> bool:
-    """Add a new exercise to a Gyma and create a record in GymaExercise table."""
+    """ Add a new exercise to a Gyma and create a record in GymaExercise table. """
     try:
         new_exercise = Exercise(
             exercise_name=exercise_dto.exercise_name,

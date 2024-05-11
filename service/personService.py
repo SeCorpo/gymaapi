@@ -8,7 +8,7 @@ from model.Person import Person
 
 
 async def add_person(db: AsyncSession, user_id: int, person_dto: PersonDTO) -> Person:
-    """ Add personal information to a user"""
+    """ Add personal information to a user. """
     if user_id is None:
         raise HTTPException(status_code=401, detail="User not found")
 

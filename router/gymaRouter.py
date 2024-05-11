@@ -1,11 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, Body
-import logging
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from database import get_db
 from dto.exerciseDTO import ExerciseDTO
 from dto.gymaDTO import GymaDTO
-from service.authService import get_auth_key
+from provider.authProvider import get_auth_key
 from service.exerciseService import add_exercise_db
 from session.sessionDataObject import SessionDataObject
 from session.sessionService import get_user_id_from_session_data, set_gyma_id_in_session, get_session_data, \

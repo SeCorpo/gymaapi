@@ -6,7 +6,7 @@ from database import get_db
 from dto.exerciseDTO import ExerciseDTO
 
 from dto.gymaDTO import GymaDTO
-from service.pubService import get_last_three_gyma_entry
+from provider.pubProvider import get_last_three_gyma_entry
 
 router = APIRouter(prefix="/api/v1/pub", tags=["pub"])
 

@@ -1,32 +1,31 @@
-from fastapi import Depends
 from sqlalchemy import select
 from sqlalchemy.exc import NoResultFound
 
-from database import get_db
 from sqlalchemy.ext.asyncio import AsyncSession
 import bcrypt
 import logging
 from model.User import User
 
 
-async def register_user(db: AsyncSession, email: str, password: str) -> bool:
+async def add_user(db: AsyncSession, email: str, password: str) -> User | None:
     """ Registers a new user to database. """
     try:
         salt, hashed_password = password_hasher(password)
 
-        user = User(
+        new_user = User(
             email=email,
             salt=salt,
             password_hash=hashed_password,
         )
-        db.add(user)
+        db.add(new_user)
         await db.commit()
-        return True
+        await db.refresh(new_user)
+        return new_user
 
     except Exception as e:
         logging.error(e)
         await db.rollback()
-        return False
+        return None
 
 
 async def get_user_by_user_id(db: AsyncSession, user_id: int) -> User | None:
@@ -62,3 +61,15 @@ def password_hasher(password_plain: str) -> (bytes, bytes):
     hashed_password = bcrypt.hashpw(password_plain.encode('utf-8'), salt)
 
     return salt, hashed_password
+
+
+async def set_email_verification(db: AsyncSession, user: User, verified: bool = True) -> bool:
+    """ Change the value of email_verification, a user needs to be email verified to be able to log in. """
+    try:
+        user.email_verified = verified
+        await db.commit()
+        return True
+    except Exception as e:
+        logging.error(e)
+        await db.rollback()
+        return False

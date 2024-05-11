@@ -12,4 +12,4 @@ class User(Base):
     password_hash = Column("password_hash", LargeBinary(length=60), nullable=False)
     salt = Column("salt", LargeBinary(length=16), nullable=False)
     account_type = Column("account_type", Enum("admin", "user"), nullable=False, default="user")
-    account_active = Column("account_active", Boolean, default=True, nullable=False)
+    email_verified = Column("email_verified", Boolean, default=False, nullable=False)

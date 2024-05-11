@@ -9,7 +9,7 @@ from aioredis import RedisError
 from dotenv import load_dotenv
 from fastapi import Depends
 
-from service.authService import get_auth_key
+from provider.authProvider import get_auth_key
 from session.sessionDataObject import SessionDataObject
 
 load_dotenv()

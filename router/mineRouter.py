@@ -6,8 +6,8 @@ from database import get_db
 from dto.exerciseDTO import ExerciseDTO
 
 from dto.gymaDTO import GymaDTO
-from service.authService import get_auth_key
-from service.mineService import get_last_three_gyma_entry_of_user
+from provider.authProvider import get_auth_key
+from provider.mineProvider import get_last_three_gyma_entry_of_user
 from session.sessionService import get_user_id_from_session_data
 
 router = APIRouter(prefix="/api/v1/mine", tags=["mine"])

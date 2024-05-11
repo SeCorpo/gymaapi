@@ -2,12 +2,11 @@ import logging
 from datetime import datetime
 from typing import Optional
 
-from fastapi import Depends, HTTPException
+from fastapi import HTTPException
 from sqlalchemy import select
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from database import get_db
 from model.Gyma import Gyma
 
 
@@ -22,6 +21,7 @@ async def get_gyma_by_gyma_id(db: AsyncSession, gyma_id: int) -> Gyma | None:
 
 
 async def add_gyma(db: AsyncSession, user_id: int | None) -> Gyma | None:
+    """ Add new Gyma to database. """
     if user_id is None:
         raise Exception("Gyma requires a person_id")
 
@@ -40,6 +40,7 @@ async def add_gyma(db: AsyncSession, user_id: int | None) -> Gyma | None:
 
 
 async def set_time_of_leaving(db: AsyncSession, user_id: int, gyma: Gyma) -> Optional[datetime]:
+    """ Time of leaving the gyma. """
     try:
         if gyma is None:
             raise HTTPException(status_code=404, detail="Gyma cannot be found")
