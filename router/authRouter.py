@@ -29,7 +29,6 @@ async def login(login_dto: LoginDTO, db: AsyncSession = Depends(get_db)):
         elif user.email_verified is False:
             raise HTTPException(status_code=403,
                                 detail="Email not verified. Please check your email to verify your account.")
-            # POSSIBLY TO RESEND THE VERIFICATION_EMAIL
         else:
             session_object_only_user_id = SessionDataObject(user_id=user_id_of_ok_credentials)
             raw_session_key = await set_session(session_object_only_user_id)

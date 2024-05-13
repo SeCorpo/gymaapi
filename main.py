@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 from database import AsyncSessionLocal, engine, Base
-from router import userRouter, gymaRouter, authRouter, mineRouter, pubRouter
+from router import userRouter, gymaRouter, authRouter, mineRouter, pubRouter, personRouter
 from _test import testRouter
 
 
@@ -43,6 +43,7 @@ app.include_router(gymaRouter.router)
 app.include_router(mineRouter.router)
 app.include_router(pubRouter.router)
 app.include_router(testRouter.router)
+app.include_router(personRouter.router)
 
 
 @app.get("/")
