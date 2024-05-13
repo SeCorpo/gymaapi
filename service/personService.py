@@ -55,7 +55,6 @@ async def edit_person(db: AsyncSession, user_id: int, person: Person, person_dto
         person.sex = person_dto.sex
         person.city = person_dto.city
         person.profile_text = person_dto.profile_text
-        # person.gyma_share = person_dto.gyma_share
 
         await db.commit()
         await db.refresh(person)

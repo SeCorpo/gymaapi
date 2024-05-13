@@ -3,9 +3,12 @@ from database import get_db
 from sqlalchemy.ext.asyncio import AsyncSession
 import logging
 
+from dto.loginResponseDTO import LoginResponseDTO
+from dto.personDTO import PersonDTO
 from mail.emailService import send_verification_email
 from provider.authProvider import check_user_credentials, encode_str, get_auth_key
 from dto.loginDTO import LoginDTO
+from service.personService import get_person_by_user_id
 from service.userService import get_user_by_email, get_user_by_user_id, set_email_verification
 from service.userVerificationService import get_user_id_by_verification_code, remove_user_verification, \
     get_verification_code_by_user_id
@@ -15,28 +18,49 @@ from session.sessionDataObject import SessionDataObject
 router = APIRouter(prefix="/api/v1/auth", tags=["authentication"])
 
 
-@router.post("/login", status_code=200)
+@router.post("/login", response_model=LoginResponseDTO, status_code=200)
 async def login(login_dto: LoginDTO, db: AsyncSession = Depends(get_db)):
     logging.info("Attempting login for user with email: " + login_dto.email)
 
     user = await get_user_by_email(db, login_dto.email)
     if user is None:
-        raise HTTPException(status_code=400, detail="User not found")
+        raise HTTPException(status_code=400,
+                            detail="User not found")
+
+    user_id_of_ok_credentials = check_user_credentials(user, login_dto.password)
+    if user_id_of_ok_credentials is None:
+        raise HTTPException(status_code=401,
+                            detail="Incorrect email or password")
+
+    if not user.email_verified:
+        raise HTTPException(status_code=403,
+                            detail="Email not verified. Please check your email to verify your account.")
+
+    session_object_only_user_id = SessionDataObject(user_id=user_id_of_ok_credentials)
+    raw_session_key = await set_session(session_object_only_user_id)
+    if raw_session_key is None:
+        raise HTTPException(status_code=500,
+                            detail="Unable to login, please try later")
+
+    person = await get_person_by_user_id(db, user_id_of_ok_credentials)
+    encoded_session_key = encode_str(raw_session_key)
+
+    if person is not None:
+        person_dto = PersonDTO(
+            first_name=person.first_name,
+            last_name=person.last_name,
+            date_of_birth=person.date_of_birth,
+            sex=person.sex,
+            city=person.city,
+            profile_text=person.profile_text,
+        )
     else:
-        user_id_of_ok_credentials = check_user_credentials(user, login_dto.password)
-        if user_id_of_ok_credentials is None:
-            raise HTTPException(status_code=401, detail="Incorrect email or password")
-        elif user.email_verified is False:
-            raise HTTPException(status_code=403,
-                                detail="Email not verified. Please check your email to verify your account.")
-        else:
-            session_object_only_user_id = SessionDataObject(user_id=user_id_of_ok_credentials)
-            raw_session_key = await set_session(session_object_only_user_id)
-            if raw_session_key is None:
-                raise HTTPException(status_code=500, detail="Unable to login, please try later")
-            else:
-                encoded_session_key = encode_str(raw_session_key)
-                return {"session_token": encoded_session_key}
+        person_dto = None
+
+    return {
+        "session_token": encoded_session_key,
+        "personDTO": person_dto
+    }
 
 
 @router.post("/logout", status_code=200)

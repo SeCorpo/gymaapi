@@ -4,10 +4,10 @@ from pydantic import BaseModel, Field
 
 
 class PersonDTO(BaseModel):
-    first_name: str = Field(..., description="First name")
-    last_name: str = Field(..., description="Last name")
-    date_of_birth: date = None
-    sex: str = Field(..., description="Sex")
+    first_name: str
+    last_name: str
+    date_of_birth: date
+    sex: str
     # country: str = Field(...)
     city: str = None
     profile_text: str = None

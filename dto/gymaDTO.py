@@ -4,12 +4,12 @@ from typing import List, Optional
 from pydantic import BaseModel, Field
 
 from dto.exerciseDTO import ExerciseDTO
-from dto.personDTO import PersonDTO
+from dto.personDTO import PersonSimpleDTO
 
 
 class GymaDTO(BaseModel):
     gyma_id: int = Field(..., description="Used for excluding gyma to send, when client has them in localstorage")
-    person: Optional[PersonDTO] = None
+    person: Optional[PersonSimpleDTO] = None
     time_of_arrival: datetime
     time_of_leaving: Optional[datetime] = None
     exercises: List[ExerciseDTO] = []

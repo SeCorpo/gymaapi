@@ -24,11 +24,12 @@ async def add_or_edit_person(person_dto: PersonDTO,
     else:
         person = await get_person_by_user_id(db, user_id)
         if person is None:
+            logging.info("Creating person object for user")
             new_person = await add_person(db, user_id, person_dto)
             if new_person is None:
                 raise HTTPException(status_code=500, detail="Person cannot be created")
             else:
-                response_person_dto = PersonDTO(
+                return PersonDTO(
                     first_name=new_person.first_name,
                     last_name=new_person.last_name,
                     date_of_birth=new_person.date_of_birth,
@@ -36,13 +37,13 @@ async def add_or_edit_person(person_dto: PersonDTO,
                     city=new_person.city,
                     profile_text=new_person.profile_text,
                 )
-                return response_person_dto
         else:
+            logging.info("Updating person object for user")
             edited_person = await edit_person(db, user_id, person, person_dto)
             if edited_person is None:
                 raise HTTPException(status_code=500, detail="Person cannot be updated")
             else:
-                response_person_dto = PersonDTO(
+                return PersonDTO(
                     first_name=edited_person.first_name,
                     last_name=edited_person.last_name,
                     date_of_birth=edited_person.date_of_birth,
@@ -50,4 +51,3 @@ async def add_or_edit_person(person_dto: PersonDTO,
                     city=edited_person.city,
                     profile_text=edited_person.profile_text,
                 )
-                return response_person_dto
