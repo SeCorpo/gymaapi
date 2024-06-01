@@ -1,12 +1,9 @@
 import logging
 from typing import List
-from fastapi import Depends
 from sqlalchemy import select, desc
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
-
-from database import get_db
 
 from model.Gyma import Gyma
 from model.GymaExercise import GymaExercise
