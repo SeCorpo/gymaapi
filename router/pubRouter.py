@@ -6,21 +6,21 @@ from database import get_db
 from dto.exerciseDTO import ExerciseDTO
 
 from dto.gymaDTO import GymaDTO
-from provider.pubProvider import get_last_three_gyma_entry
+from provider.pubProvider import get_last_ten_gyma_entry
 
 router = APIRouter(prefix="/api/v1/pub", tags=["pub"])
 
 
 @router.get("/", response_model=List[GymaDTO], status_code=200)
-async def get_pub_three_latest(gyma_keys: str = None, db: AsyncSession = Depends(get_db)):
+async def get_pub_ten_latest(gyma_keys: str = None, db: AsyncSession = Depends(get_db)):
     logging.info(f"Searching for the latest three gyma entries {'excluding: ' + gyma_keys if gyma_keys else ''}")
 
-    pub_three_latest_gyma = await get_last_three_gyma_entry(db, gyma_keys)
-    if not pub_three_latest_gyma:
+    pub_ten_latest_gyma = await get_last_ten_gyma_entry(db, gyma_keys)
+    if not pub_ten_latest_gyma:
         raise HTTPException(status_code=404, detail="No gyma entries found")
 
     pub_gyma_with_exercises = []
-    for gyma in pub_three_latest_gyma:
+    for gyma in pub_ten_latest_gyma:
         exercise_dtos = [
             ExerciseDTO(
                 exercise_name=exercise.exercise.exercise_name,
