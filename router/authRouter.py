@@ -3,11 +3,10 @@ from database import get_db
 from sqlalchemy.ext.asyncio import AsyncSession
 import logging
 
-from dto.loginResponseDTO import LoginResponseDTO
 from dto.personDTO import PersonDTO
 from mail.emailService import send_verification_email
 from provider.authProvider import check_user_credentials, encode_str, get_auth_key
-from dto.loginDTO import LoginDTO
+from dto.loginDTO import LoginDTO, LoginResponseDTO
 from service.personService import get_person_by_user_id
 from service.userService import get_user_by_email, get_user_by_user_id, set_email_verification
 from service.userVerificationService import get_user_id_by_verification_code, remove_user_verification, \
