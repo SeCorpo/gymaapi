@@ -1,21 +1,27 @@
 from datetime import date
+from typing import Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 
 class PersonDTO(BaseModel):
+    profile_url: str
     first_name: str
     last_name: str
     date_of_birth: date
     sex: str
-    # country: str = Field(...)
-    city: str = None
-    profile_text: str = None
+    city: Optional[str] = None
+    profile_text: Optional[str] = None
+    pf_path_l: Optional[str] = None
+    pf_path_m: Optional[str] = None
 
 
 class PersonSimpleDTO(BaseModel):
+    """ For use on non-personal request (e.q. gymas, not profile). """
+    profile_url: str
     full_name: str
     sex: str
+    pf_path_m: Optional[str] = None
 
     @property
     def full_name(self) -> str:

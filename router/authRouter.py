@@ -46,6 +46,7 @@ async def login(login_dto: LoginDTO, db: AsyncSession = Depends(get_db)):
 
     if person is not None:
         person_dto = PersonDTO(
+            profile_url=person.profile_url,
             first_name=person.first_name,
             last_name=person.last_name,
             date_of_birth=person.date_of_birth,

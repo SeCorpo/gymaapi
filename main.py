@@ -1,6 +1,7 @@
 import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 from database import AsyncSessionLocal, engine, Base
@@ -44,6 +45,9 @@ app.include_router(mineRouter.router)
 app.include_router(pubRouter.router)
 app.include_router(testRouter.router)
 app.include_router(personRouter.router)
+
+app.mount("/images/large", StaticFiles(directory="images/large"), name="large_images")
+app.mount("/images/medium", StaticFiles(directory="images/medium"), name="medium_images")
 
 
 @app.get("/")
