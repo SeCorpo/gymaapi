@@ -33,6 +33,17 @@ def get_auth_key(authorization: str = Header(default=None)) -> str:
         raise HTTPException(status_code=401, detail="Invalid authentication credentials.")
 
 
+def get_auth_key_or_none(authorization: str = Header(default=None)) -> str | None:
+    """ Get decoded Authentication token from headers as a string, without raising exception. """
+    try:
+        logging.info(f"Authorization header received: {authorization}")
+        decoded_key = decode_str(authorization)
+        logging.info(f"Decoded key: {decoded_key}")
+        return decoded_key
+    except Exception as e:
+        raise HTTPException(status_code=401, detail="Invalid authentication credentials.")
+
+
 def encode_str(text: str) -> str:
     """ Encode a string using base64. Used for sending encoded session_token to client. """
     encoded_bytes = base64.b64encode(text.encode('utf-8'))
