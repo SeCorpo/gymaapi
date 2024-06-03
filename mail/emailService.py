@@ -5,7 +5,7 @@ from email.header import Header
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-from aiosmtplib import SMTPException
+from aiosmtplib import SMTPException, SMTP
 from dotenv import load_dotenv
 import aiosmtplib
 
@@ -20,24 +20,39 @@ async def create_email_connection():
     provided in environment variables and cache it globally.
     """
     global _email_connection
-    if _email_connection is None:
-        email_host = os.getenv("EMAIL_HOST")
-        email_port = os.getenv("EMAIL_PORT")
-        email_username = os.getenv("EMAIL_USERNAME")
-        email_password = os.getenv("EMAIL_PASSWORD")
-        use_tls = os.getenv("EMAIL_USE_TLS", True)
+    email_host = os.getenv("EMAIL_HOST")
+    email_port = int(os.getenv("EMAIL_PORT"))
+    email_username = os.getenv("EMAIL_USERNAME")
+    email_password = os.getenv("EMAIL_PASSWORD")
+    use_tls = os.getenv("EMAIL_USE_TLS", True)
 
-        try:
-            smtp_client = aiosmtplib.SMTP(
-                hostname=email_host, port=email_port, use_tls=use_tls
-            )
-            await smtp_client.connect()
-            await smtp_client.login(email_username, email_password)
-            _email_connection = smtp_client
+    try:
+        smtp_client = aiosmtplib.SMTP(
+            hostname=email_host, port=email_port, use_tls=use_tls
+        )
+        await smtp_client.connect()
+        await smtp_client.login(email_username, email_password)
+        _email_connection = smtp_client
+        logging.info("SMTP connection established and cached.")
 
-        except SMTPException as e:
-            logging.error(f"Failed to create mail connection: {e}")
-            return None
+    except SMTPException as e:
+        logging.error(f"Failed to create mail connection: {e}")
+        _email_connection = None
+
+    return _email_connection
+
+
+async def get_email_connection():
+    """
+    Get the email connection, creating it if necessary, and handle reconnection if needed.
+    """
+    global _email_connection
+
+    if _email_connection is None or not _email_connection.is_connected:
+        logging.info("Creating a new SMTP connection.")
+        _email_connection = await create_email_connection()
+    else:
+        logging.info("Using cached SMTP connection.")
 
     return _email_connection
 
@@ -46,37 +61,34 @@ async def send_email(recipient: str, subject: str, content: str, content_type: s
     """ Sending a mail to recipient. Content_types can be 'plain' or 'html'. """
     smtp_client = None
     try:
-        smtp_client = await create_email_connection()
+        smtp_client = await get_email_connection()
         if smtp_client is None:
             logging.error("Unable to send mail: Email connection is not available.")
             return False
-        else:
-            sender_email = os.getenv("EMAIL_USERNAME")
-            sender_name = os.getenv("EMAIL_NAME")
-            sender = f"{sender_name} <{sender_email}>"
 
-            domain = os.getenv("EMAIL_DOMAIN")
+        sender_email = os.getenv("EMAIL_USERNAME")
+        sender_name = os.getenv("EMAIL_NAME")
+        sender = f"{sender_name} <{sender_email}>"
 
-            message = MIMEMultipart('alternative')
-            message['From'] = sender
-            message['To'] = recipient
-            message['Subject'] = Header(subject, 'utf-8')
+        domain = os.getenv("EMAIL_DOMAIN")
 
-            message_id = f"<{uuid.uuid4()}@{domain}>"
-            message['Message-ID'] = message_id
+        message = MIMEMultipart('alternative')
+        message['From'] = sender
+        message['To'] = recipient
+        message['Subject'] = Header(subject, 'utf-8')
 
-            message.attach(MIMEText(content, content_type, 'utf-8'))
+        message_id = f"<{uuid.uuid4()}@{domain}>"
+        message['Message-ID'] = message_id
 
-            await smtp_client.send_message(message)
-            logging.info(f"Email successfully sent to {recipient}")
-            return True
+        message.attach(MIMEText(content, content_type, 'utf-8'))
+
+        await smtp_client.send_message(message)
+        logging.info(f"Email successfully sent to {recipient}")
+        return True
 
     except Exception as e:
         logging.error(f"Failed to send mail: {e}")
         return False
-    finally:
-        if smtp_client:
-            await smtp_client.quit()
 
 
 async def send_verification_email(verification_code: str, recipient: str) -> bool:
