@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from database import get_db
 from dto.imageDTO import ImageDTO
-from dto.personDTO import PersonDTO
+from dto.personDTO import PersonDTO, EnterPersonDTO
 from provider.authProvider import get_auth_key
 from provider.imageProvider import process_image, move_images_to_archive
 from service.personService import add_person, get_person_by_user_id, edit_person, set_pf_paths
@@ -18,7 +18,7 @@ API_URL = os.getenv("API_BASE_URL")
 
 
 @router.post("/", response_model=PersonDTO, status_code=200)
-async def add_or_edit_person(person_dto: PersonDTO,
+async def add_or_edit_person(enter_person_dto: EnterPersonDTO,
                              auth_token: str | None = Depends(get_auth_key),
                              db: AsyncSession = Depends(get_db)):
     logging.info("Creating or editing person object for user")
@@ -30,7 +30,7 @@ async def add_or_edit_person(person_dto: PersonDTO,
         person = await get_person_by_user_id(db, user_id)
         if person is None:
             logging.info("Creating person object for user")
-            new_person = await add_person(db, user_id, person_dto)
+            new_person = await add_person(db, user_id, enter_person_dto)
             if new_person is None:
                 raise HTTPException(status_code=500, detail="Person cannot be created")
             else:
@@ -47,7 +47,7 @@ async def add_or_edit_person(person_dto: PersonDTO,
                 )
         else:
             logging.info("Updating person object for user")
-            edited_person = await edit_person(db, user_id, person, person_dto)
+            edited_person = await edit_person(db, user_id, person, enter_person_dto)
             if edited_person is None:
                 raise HTTPException(status_code=500, detail="Person cannot be updated")
             else:
