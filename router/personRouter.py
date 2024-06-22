@@ -8,6 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from database import get_db
 from dto.imageDTO import ImageDTO
 from dto.personDTO import PersonDTO, EnterPersonDTO
+from dto.profileDTO import MyProfileDTO
 from provider.authProvider import get_auth_key
 from provider.imageProvider import process_image, move_images_to_archive
 from service.personService import add_person, get_person_by_user_id, edit_person, set_pf_paths
@@ -17,7 +18,7 @@ router = APIRouter(prefix="/api/v1/person", tags=["person"])
 API_URL = os.getenv("API_BASE_URL")
 
 
-@router.post("/", response_model=PersonDTO, status_code=200)
+@router.post("/", response_model=MyProfileDTO, status_code=200)
 async def add_or_edit_person(enter_person_dto: EnterPersonDTO,
                              auth_token: str | None = Depends(get_auth_key),
                              db: AsyncSession = Depends(get_db)):
@@ -34,7 +35,7 @@ async def add_or_edit_person(enter_person_dto: EnterPersonDTO,
             if new_person is None:
                 raise HTTPException(status_code=500, detail="Person cannot be created")
             else:
-                return PersonDTO(
+                person_dto = PersonDTO(
                     profile_url=new_person.profile_url,
                     first_name=new_person.first_name,
                     last_name=new_person.last_name,
@@ -45,13 +46,19 @@ async def add_or_edit_person(enter_person_dto: EnterPersonDTO,
                     pf_path_l=new_person.pf_path_l,
                     pf_path_m=new_person.pf_path_m,
                 )
+                my_profile_dto = MyProfileDTO(
+                    personDTO=person_dto,
+                    friend_list=None,
+                    pending_friend_list=None
+                )
+                return my_profile_dto
         else:
             logging.info("Updating person object for user")
             edited_person = await edit_person(db, user_id, person, enter_person_dto)
             if edited_person is None:
                 raise HTTPException(status_code=500, detail="Person cannot be updated")
             else:
-                return PersonDTO(
+                person_dto = PersonDTO(
                     profile_url=edited_person.profile_url,
                     first_name=edited_person.first_name,
                     last_name=edited_person.last_name,
@@ -62,6 +69,12 @@ async def add_or_edit_person(enter_person_dto: EnterPersonDTO,
                     pf_path_l=edited_person.pf_path_l,
                     pf_path_m=edited_person.pf_path_m,
                 )
+                my_profile_dto = MyProfileDTO(
+                    personDTO=person_dto,
+                    friend_list=None,
+                    pending_friend_list=None
+                )
+                return my_profile_dto
 
 
 @router.post("/picture", response_model=PersonDTO, status_code=200)

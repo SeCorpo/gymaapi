@@ -117,6 +117,10 @@ async def generate_unique_profile_url(db: AsyncSession, first_name: str, last_na
 
 async def check_profile_url_available(db: AsyncSession, profile_url: str) -> bool:
     """Check if profile url is available."""
-    async with db.begin():
+    try:
         result = await db.execute(select(Person).filter_by(profile_url=profile_url))
         return not bool(result.scalar_one_or_none())
+    except Exception as e:
+        await db.rollback()
+        logging.error(e)
+        return False
