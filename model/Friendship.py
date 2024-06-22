@@ -13,9 +13,19 @@ class Friendship(Base):
     status = Column(Enum('pending', 'accepted', 'blocked'), nullable=False, default='pending')
     since = Column(Date, nullable=False)
 
-    person = relationship('Person', foreign_keys=[Person.person_id], back_populates='friends',
-                          primaryjoin='Friendship.person_id == Person.person_id')
-    friend = relationship('Person', foreign_keys=[Person.person_id], back_populates='friends',
-                          primaryjoin='Friendship.friend_id == Person.person_id')
+    person = relationship(
+        'Person',
+        foreign_keys=[person_id, friend_id],
+        back_populates='friends',
+        primaryjoin='Friendship.person_id == Person.person_id',
+        overlaps="friends"
+    )
+
+    friend = relationship(
+        'Person',
+        foreign_keys=[friend_id],
+        primaryjoin='Friendship.friend_id == Person.person_id',
+        overlaps="friends"
+    )
 
     __table_args__ = (UniqueConstraint('person_id', 'friend_id', name='_person_friend_uc'),)

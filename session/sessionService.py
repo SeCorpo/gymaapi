@@ -14,7 +14,8 @@ from session.sessionDataObject import SessionDataObject
 
 load_dotenv()
 
-expire_time = int(os.getenv("SESSION_EXPIRE_TIME_SECONDS"))
+expire_time_default = int(os.getenv("SESSION_EXPIRE_TIME_SECONDS"))
+expire_time_trust_device = int(os.getenv("SESSION_EXPIRE_TIME_SECONDS_TRUST_DEVICE"))
 _redis_connection = None  # Cached Redis connection object
 
 
@@ -33,6 +34,9 @@ async def create_redis_connection():
         except RedisError as e:
             logging.error(f"Error connecting to Redis: {e}")
             return None
+        except Exception as e:
+            logging.error(f"Other Exception while create_redis_connection: {e}")
+            return None
 
     return _redis_connection
 
@@ -44,15 +48,25 @@ async def get_session_data(key: str = Depends(get_auth_key)) -> SessionDataObjec
     except RedisError as e:
         logging.error(e)
         return None
+    except Exception as e:
+        logging.error(f"Other Exception while get_session_data: {e}")
+        return None
 
     session_data = await redis_connection.hgetall(key)
     if session_data:
         try:
+            session_data['trustDevice'] = session_data.get('trustDevice') == '1'
+            session_data_object = SessionDataObject(**session_data)
+            expire_time = expire_time_trust_device if session_data_object.trustDevice else expire_time_default
+
             await redis_connection.expire(key, expire_time)
 
-            return SessionDataObject(**session_data)
+            return session_data_object
         except pydantic.ValidationError as e:
             logging.error(f"Invalid session data format: {e}")
+            return None
+        except Exception as e:
+            logging.error(f"Other Exception while get_session_data: {e}")
             return None
     else:
         return None
@@ -61,9 +75,18 @@ async def get_session_data(key: str = Depends(get_auth_key)) -> SessionDataObjec
 async def get_user_id_from_session_data(key: str) -> int | None:
     try:
         session_data_object: SessionDataObject = await get_session_data(key)
-        return session_data_object.user_id
+        if session_data_object is None:
+            return None
+        else:
+            return session_data_object.user_id
     except pydantic.ValidationError as e:
         logging.error(f"Invalid session data format: {e}")
+        return None
+    except RedisError as e:
+        logging.error(f"RedisError while get_user_id_from_session_data: {e}")
+        return None
+    except Exception as e:
+        logging.error(f"Other Exception while get_user_id_from_session_data: {e}")
         return None
 
 
@@ -77,6 +100,9 @@ async def get_gyma_id_from_session_data(key: str) -> int | None:
     except pydantic.ValidationError as e:
         logging.error(f"Invalid session data format: {e}")
         return None
+    except Exception as e:
+        logging.error(f"Other Exception while get_gyma_id_from_session_data: {e}")
+        return False
 
 
 async def set_session(session_data: SessionDataObject, key: str | None = None) -> str | None:
@@ -90,7 +116,9 @@ async def set_session(session_data: SessionDataObject, key: str | None = None) -
         if key is None:
             key = await generate_random_key()
 
-        data_dict = {k: v for k, v in session_data.dict().items() if v is not None}
+        data_dict = {k: (int(v) if isinstance(v, bool) else v) for k, v in session_data.dict().items() if v is not None}
+        expire_time = expire_time_trust_device if session_data.trustDevice else expire_time_default
+
         async with redis_connection:
             await redis_connection.hmset(key, data_dict)
             await redis_connection.expire(key, expire_time)
@@ -98,6 +126,9 @@ async def set_session(session_data: SessionDataObject, key: str | None = None) -
         return key
     except RedisError as e:
         logging.error(f"Error setting session data in Redis: {e}")
+        return None
+    except Exception as e:
+        logging.error(f"Other Exception while set_session: {e}")
         return None
 
 
@@ -121,17 +152,25 @@ async def delete_gyma_id_from_session(key: str) -> bool:
     if key is None:
         return False
     session_data: SessionDataObject = await get_session_data(key)
-    if session_data.gyma_id is None:
+    if session_data is None or session_data.gyma_id is None:
         return False
     try:
         redis_connection = await create_redis_connection()
         if redis_connection is None:
-            logging.error(f"Redis connection failed")
+            logging.error("Redis connection failed")
             return False
-        await redis_connection.hdel(key, "gyma_id")
-        await redis_connection.expire(key, expire_time)
+
+        expire_time = expire_time_trust_device if session_data.trustDevice else expire_time_default
+
+        async with redis_connection:
+            await redis_connection.hdel(key, "gyma_id")
+            await redis_connection.expire(key, expire_time)
+        return True
     except RedisError as e:
         logging.error(f"Error deleting gyma_id from session data: {e}")
+        return False
+    except Exception as e:
+        logging.error(f"Other Exception while delete_gyma_id_from_session: {e}")
         return False
 
 
@@ -151,6 +190,9 @@ async def delete_session(key: str) -> bool:
 
     except RedisError as e:
         logging.error(f"Error deleting session data in Redis (key: {key}): {e}")
+        return False
+    except Exception as e:
+        logging.error(f"Other Exception while delete_session: {e}")
         return False
 
 
