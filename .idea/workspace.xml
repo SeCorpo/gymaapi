@@ -4,9 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5ef567d6-6873-43d9-9b0e-2a9dfae214f4" name="Changes" comment="gymaGTO, PersonDTO, pubRouter, get_last_three_gyma_entry">
+    <list default="true" id="5ef567d6-6873-43d9-9b0e-2a9dfae214f4" name="Changes" comment="profileRouter, gymbro with Person dto">
+      <change afterPath="$PROJECT_DIR$/router/gymbroRouter.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gymaapi.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gymaapi.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/router/pubRouter.py" beforeDir="false" afterPath="$PROJECT_DIR$/router/pubRouter.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,18 +20,24 @@
       <list>
         <option value="FastAPI main" />
         <option value="FastAPI test_main" />
+        <option value="Python Unit Test" />
         <option value="Python Script" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="development" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="ProjectErrors" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
@@ -42,33 +50,37 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "FastAPI.gymaapi.executor": "Run",
-    "HTTP Request.test_main | #2.executor": "Run",
-    "HTTP Request.test_main | #3.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "master",
-    "last_opened_file_path": "/home/secorp/sd/gymaapi/session",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "run.code.analysis.last.selected.profile": "aDefault",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;FastAPI.gymaapi.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.test_main | #2.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.test_main | #3.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_email.MyTestCase.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests for test_email.MyTestCase.test_create_email_connection.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/secorp/sd/collow&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;aDefault&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "mysql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql&quot;,
+      &quot;redis&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/provider" />
       <recent name="$PROJECT_DIR$/session" />
       <recent name="$PROJECT_DIR$/" />
       <recent name="$PROJECT_DIR$/test" />
@@ -96,18 +108,53 @@
       <option name="launchJavascriptDebuger" value="false" />
       <method v="2" />
     </configuration>
+    <configuration name="Python tests for _test.test_email.MyTestCase" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="gymaapi" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/_test" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;_test.test_email.MyTestCase&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Python tests for _test.test_email.MyTestCase.test_create_email_connection" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="gymaapi" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/_test" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;_test.test_email.MyTestCase.test_create_email_connection&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="HTTP Request.test_main | #3" />
         <item itemvalue="HTTP Request.test_main | #2" />
+        <item itemvalue="Python tests.Python tests for _test.test_email.MyTestCase" />
+        <item itemvalue="Python tests.Python tests for _test.test_email.MyTestCase.test_create_email_connection" />
+        <item itemvalue="HTTP Request.test_main | #3" />
       </list>
     </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-1d06a55b98c1-74d2a5396914-JavaScript-PY-241.14494.241" />
-        <option value="bundled-python-sdk-0509580d9d50-28c9f5db9ffe-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-241.14494.241" />
+        <option value="bundled-js-predefined-1d06a55b98c1-91d5c284f522-JavaScript-PY-241.15989.155" />
+        <option value="bundled-python-sdk-babbdf50b680-7c6932dee5e4-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-241.15989.155" />
       </set>
     </attachedChunks>
   </component>
@@ -122,6 +169,23 @@
       <workItem from="1711481016187" duration="104278000" />
       <workItem from="1712174754754" duration="1179000" />
       <workItem from="1712421841991" duration="24684000" />
+      <workItem from="1714771227176" duration="6310000" />
+      <workItem from="1715022095173" duration="52080000" />
+      <workItem from="1715605254248" duration="8309000" />
+      <workItem from="1716121505936" duration="20867000" />
+      <workItem from="1716464080672" duration="27863000" />
+      <workItem from="1716897252258" duration="20997000" />
+      <workItem from="1717155124935" duration="727000" />
+      <workItem from="1717155858662" duration="14322000" />
+      <workItem from="1717454834912" duration="1049000" />
+      <workItem from="1717455891117" duration="82000" />
+      <workItem from="1717456151443" duration="881000" />
+      <workItem from="1717457063164" duration="504000" />
+      <workItem from="1717599972533" duration="85000" />
+      <workItem from="1717971510361" duration="9920000" />
+      <workItem from="1718203717511" duration="12000" />
+      <workItem from="1718657956128" duration="55384000" />
+      <workItem from="1719613352794" duration="6182000" />
     </task>
     <task id="LOCAL-00001" summary="user model + registerDTO">
       <option name="closed" value="true" />
@@ -163,7 +227,151 @@
       <option name="project" value="LOCAL" />
       <updated>1712611020949</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="syntax fix preventing login, remove lost file userDB???">
+      <option name="closed" value="true" />
+      <created>1714676310364</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1714676310364</updated>
+    </task>
+    <task id="LOCAL-00007" summary="email connection and sender service, testRouter with email test endp, mock test for email service fn,">
+      <option name="closed" value="true" />
+      <created>1714687029792</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1714687029792</updated>
+    </task>
+    <task id="LOCAL-00008" summary="email verify endps and fn and entity, emailService fn, changed rules on Service and Provider modules, fix some descriptions, README, Register endp incorporate email verification, set_email_verification fn,">
+      <option name="closed" value="true" />
+      <created>1715433116170</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1715433116170</updated>
+    </task>
+    <task id="LOCAL-00009" summary="personRouter, add or edit a Person">
+      <option name="closed" value="true" />
+      <created>1715605540739</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1715605540739</updated>
+    </task>
+    <task id="LOCAL-00010" summary="endp login incl person_dto using loginResponseDTO, gyma_dto using personsimpledto,">
+      <option name="closed" value="true" />
+      <created>1715639161039</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1715639161039</updated>
+    </task>
+    <task id="LOCAL-00011" summary="excluding dir images from commit">
+      <option name="closed" value="true" />
+      <created>1717155715500</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1717155715500</updated>
+    </task>
+    <task id="LOCAL-00012" summary="excluding dir images from commit">
+      <option name="closed" value="true" />
+      <created>1717155777280</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1717155777280</updated>
+    </task>
+    <task id="LOCAL-00013" summary="loginResponseDTO in loginDTO">
+      <option name="closed" value="true" />
+      <created>1717271636526</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1717271636527</updated>
+    </task>
+    <task id="LOCAL-00014" summary="last 10 gyma in pub">
+      <option name="closed" value="true" />
+      <created>1717271751432</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1717271751432</updated>
+    </task>
+    <task id="LOCAL-00015" summary="imageProvider, dto, staticfolder mounts, paths to person, Person model, profile URL, friendship, personDTO,">
+      <option name="closed" value="true" />
+      <created>1717272532250</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1717272532250</updated>
+    </task>
+    <task id="LOCAL-00016" summary="mineProvider rm unused imports">
+      <option name="closed" value="true" />
+      <created>1717272587761</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1717272587761</updated>
+    </task>
+    <task id="LOCAL-00017" summary="get_auth_key_or_none fn">
+      <option name="closed" value="true" />
+      <created>1717456436063</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1717456436063</updated>
+    </task>
+    <task id="LOCAL-00018" summary="get_db finally close">
+      <option name="closed" value="true" />
+      <created>1717456488875</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1717456488875</updated>
+    </task>
+    <task id="LOCAL-00019" summary="emailService - get_email_connection, finally close,">
+      <option name="closed" value="true" />
+      <created>1717456712014</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1717456712014</updated>
+    </task>
+    <task id="LOCAL-00020" summary="enterPersonDTO use on personService and Router">
+      <option name="closed" value="true" />
+      <created>1717456986377</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1717456986377</updated>
+    </task>
+    <task id="LOCAL-00021" summary="personRouter add_or_edit_person endp, myProfileDTO, fix check_profile_url_available">
+      <option name="closed" value="true" />
+      <created>1719055657370</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1719055657370</updated>
+    </task>
+    <task id="LOCAL-00022" summary="trustDevice handling sessionService, LoginResponseDTO, friendshipService, Friendship Person Model Relation fix,">
+      <option name="closed" value="true" />
+      <created>1719058364343</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1719058364343</updated>
+    </task>
+    <task id="LOCAL-00023" summary="profileRouter, gymbro with Person dto">
+      <option name="closed" value="true" />
+      <created>1719963611040</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1719963611040</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -190,9 +398,27 @@
     <MESSAGE value="push all for remote work" />
     <MESSAGE value="gymaDTO,  CORS, api v1" />
     <MESSAGE value="gymaGTO, PersonDTO, pubRouter, get_last_three_gyma_entry" />
-    <option name="LAST_COMMIT_MESSAGE" value="gymaGTO, PersonDTO, pubRouter, get_last_three_gyma_entry" />
+    <MESSAGE value="syntax fix preventing login, remove lost file userDB???" />
+    <MESSAGE value="email connection and sender service, testRouter with email test endp, mock test for email service fn," />
+    <MESSAGE value="email verify endps and fn and entity, emailService fn, changed rules on Service and Provider modules, fix some descriptions, README, Register endp incorporate email verification, set_email_verification fn," />
+    <MESSAGE value="personRouter, add or edit a Person" />
+    <MESSAGE value="endp login incl person_dto using loginResponseDTO, gyma_dto using personsimpledto," />
+    <MESSAGE value="excluding dir images from commit" />
+    <MESSAGE value="loginResponseDTO in loginDTO" />
+    <MESSAGE value="last 10 gyma in pub" />
+    <MESSAGE value="imageProvider, dto, staticfolder mounts, paths to person, Person model, profile URL, friendship, personDTO," />
+    <MESSAGE value="mineProvider rm unused imports" />
+    <MESSAGE value="get_auth_key_or_none fn" />
+    <MESSAGE value="get_db finally close" />
+    <MESSAGE value="emailService - get_email_connection, finally close," />
+    <MESSAGE value="enterPersonDTO use on personService and Router" />
+    <MESSAGE value="personRouter add_or_edit_person endp, myProfileDTO, fix check_profile_url_available" />
+    <MESSAGE value="trustDevice handling sessionService, LoginResponseDTO, friendshipService, Friendship Person Model Relation fix," />
+    <MESSAGE value="profileRouter, gymbro with Person dto" />
+    <option name="LAST_COMMIT_MESSAGE" value="profileRouter, gymbro with Person dto" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/gymaapi$gymaapi.coverage" NAME="gymaapi Coverage Results" MODIFIED="1712612535795" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/gymaapi$.coverage" NAME=" Coverage Results" MODIFIED="1714686152045" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/test" />
+    <SUITE FILE_PATH="coverage/gymaapi$gymaapi.coverage" NAME="gymaapi Coverage Results" MODIFIED="1719615741286" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
   </component>
 </project>
