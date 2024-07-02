@@ -13,7 +13,7 @@ router = APIRouter(prefix="/api/v1/pub", tags=["pub"])
 
 @router.get("/", response_model=List[GymaDTO], status_code=200)
 async def get_pub_ten_latest(gyma_keys: str = None, db: AsyncSession = Depends(get_db)):
-    logging.info(f"Searching for the latest three gyma entries {'excluding: ' + gyma_keys if gyma_keys else ''}")
+    logging.info(f"Searching for the latest ten gyma entries {'excluding: ' + gyma_keys if gyma_keys else ''}")
 
     pub_ten_latest_gyma = await get_last_ten_gyma_entry(db, gyma_keys)
     if not pub_ten_latest_gyma:
