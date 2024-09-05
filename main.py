@@ -5,7 +5,7 @@ from fastapi.staticfiles import StaticFiles
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 from database import AsyncSessionLocal, engine, Base
-from router import userRouter, gymaRouter, authRouter, mineRouter, pubRouter, personRouter, profileRouter
+from router import userRouter, gymaRouter, authRouter, mineRouter, pubRouter, personRouter, profileRouter, gymbroRouter
 from _test import testRouter
 
 
@@ -46,6 +46,7 @@ app.include_router(pubRouter.router)
 app.include_router(testRouter.router)
 app.include_router(personRouter.router)
 app.include_router(profileRouter.router)
+app.include_router(gymbroRouter.router)
 
 app.mount("/images/large", StaticFiles(directory="images/large"), name="large_images")
 app.mount("/images/medium", StaticFiles(directory="images/medium"), name="medium_images")

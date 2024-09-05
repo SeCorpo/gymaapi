@@ -28,6 +28,10 @@ async def get_friends_by_person_id(db: AsyncSession, person_id: int) -> list[Per
 async def get_friendship(db: AsyncSession, person_id: int, friend_id: int) -> Friendship | None:
     """ Get friendship connection. """
     try:
+        if person_id == friend_id:
+            logging.error("Cannot have friendship connection with oneself")
+            return None
+
         logging.info(f"Getting friendship for {person_id} and {friend_id}")
         result = await db.execute(
             select(Friendship).where(

@@ -6,7 +6,6 @@ from dto.exerciseDTO import ExerciseDTO
 from dto.gymaDTO import GymaDTO
 from provider.authProvider import get_auth_key
 from service.exerciseService import add_exercise_db
-from session.sessionDataObject import SessionDataObject
 from session.sessionService import get_user_id_from_session_data, set_gyma_id_in_session, get_session_data, \
     delete_gyma_id_from_session
 from service.gymaService import add_gyma, set_time_of_leaving, get_gyma_by_gyma_id
@@ -33,11 +32,11 @@ async def start_gyma(auth_token: str | None = Depends(get_auth_key),
 
 
 @router.put("/end")
-async def end_gyma(auth_token: str | None = Depends(get_auth_key),
+async def end_gyma(auth_token: str = Depends(get_auth_key),
                    db: AsyncSession = Depends(get_db)):
 
     session_data = await get_session_data(auth_token)
-    if session_data or session_data.gyma_id or session_data.user_id is None:
+    if session_data is None or session_data.gyma_id is None or session_data.user_id is None:
         raise HTTPException(status_code=404, detail="Session invalid")
     else:
         gyma = await get_gyma_by_gyma_id(db, session_data.gyma_id)
@@ -55,14 +54,15 @@ async def end_gyma(auth_token: str | None = Depends(get_auth_key),
 
 
 @router.post("/exercise", status_code=201)
-async def add_exercise_to_gyma(exercise_dto: ExerciseDTO = Body(...),
-                               session: SessionDataObject = Depends(get_session_data),
+async def add_exercise_to_gyma(auth_token: str = Depends(get_auth_key),
+                               exercise_dto: ExerciseDTO = Body(...),
                                db: AsyncSession = Depends(get_db)):
 
-    if session or session.gyma_id is None:
+    session_data = await get_session_data(auth_token)
+    if session_data is None or session_data.gyma_id is None:
         raise HTTPException(status_code=404, detail="Session invalid")
     else:
-        added_exercise = await add_exercise_db(db, session.gyma_id, exercise_dto)
+        added_exercise = await add_exercise_db(db, session_data.gyma_id, exercise_dto)
         if added_exercise:
             return added_exercise
         else:

@@ -5,10 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5ef567d6-6873-43d9-9b0e-2a9dfae214f4" name="Changes" comment="profileRouter, gymbro with Person dto">
-      <change afterPath="$PROJECT_DIR$/router/gymbroRouter.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gymaapi.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gymaapi.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/router/gymaRouter.py" beforeDir="false" afterPath="$PROJECT_DIR$/router/gymaRouter.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/service/friendshipService.py" beforeDir="false" afterPath="$PROJECT_DIR$/service/friendshipService.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/session/sessionService.py" beforeDir="false" afterPath="$PROJECT_DIR$/session/sessionService.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -186,6 +188,8 @@
       <workItem from="1718203717511" duration="12000" />
       <workItem from="1718657956128" duration="55384000" />
       <workItem from="1719613352794" duration="6182000" />
+      <workItem from="1724261039112" duration="2487000" />
+      <workItem from="1724766360527" duration="11855000" />
     </task>
     <task id="LOCAL-00001" summary="user model + registerDTO">
       <option name="closed" value="true" />
@@ -419,6 +423,6 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/gymaapi$.coverage" NAME=" Coverage Results" MODIFIED="1714686152045" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/test" />
-    <SUITE FILE_PATH="coverage/gymaapi$gymaapi.coverage" NAME="gymaapi Coverage Results" MODIFIED="1719615741286" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/gymaapi$gymaapi.coverage" NAME="gymaapi Coverage Results" MODIFIED="1725021649337" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
   </component>
 </project>
