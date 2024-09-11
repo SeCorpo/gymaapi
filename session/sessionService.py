@@ -22,12 +22,20 @@ async def create_redis_connection():
     if _redis_connection is None:
         redis_host = os.getenv("REDIS_HOST")
         redis_port = os.getenv("REDIS_PORT")
-        redis_db = os.getenv("REDIS_DB")
+        redis_db = os.getenv("REDIS_DB", "0")
+        redis_password = os.getenv("REDIS_PASSWORD")
 
         try:
-            _redis_connection = await aioredis.from_url(
-                f"redis://{redis_host}:{redis_port}/{redis_db}", decode_responses=True
-            )
+            if redis_password:
+                _redis_connection = await aioredis.from_url(
+                    f"redis://:{redis_password}@{redis_host}:{redis_port}/{redis_db}",
+                    decode_responses=True
+                )
+            else:
+                _redis_connection = await aioredis.from_url(
+                    f"redis://{redis_host}:{redis_port}/{redis_db}",
+                    decode_responses=True
+                )
         except RedisError as e:
             logging.error(f"Error connecting to Redis: {e}")
             return None
